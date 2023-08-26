@@ -1,0 +1,16 @@
+{
+  "name": "myblog",
+  "version": "1.0",
+  "description": "记录",
+  "main": "511024",
+  "repository": "www.qingsahn.com",
+  "author": "hjl",
+  "license": "MIT",
+  "scripts": {
+    "dev": "vuepress dev docs",
+    "docs:build": "vuepress build docs"
+  },
+  "devDependencies": {
+    "vuepress": "^1.9.10"
+  }
+}
