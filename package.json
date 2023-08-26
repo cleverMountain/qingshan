@@ -8,7 +8,8 @@
   "license": "MIT",
   "scripts": {
     "dev": "vuepress dev docs",
-    "bubuild": "vuepress build docs"
+    "build": "vuepress build docs",
+    "gh": "bash scripts/deploy-gh.sh"
   },
   "devDependencies": {
     "vuepress": "^1.9.10"
