@@ -19,44 +19,37 @@ module.exports = {
         text: "基础知识",
         link: "/base/",
       },
+      {
+        text: "技术文章",
+        link: "/article/",
+      }
     ],
 
     sidebar: {
       '/base/': [
         {
-          title: '基础知识',
-
+          title: 'js相关',
           children: [
             {
-              title: "js基础",
-              link: "/base/jsBasic/",
-              children: [
-                {
-                  title:"关于数组方法",
-                  path: '/base/jsBasic/array/'
-                },
-                {
-                  title:"关于对象方法",
-                  path: '/base/jsBasic/object/'
-                },
-              ]
+              title: "关于数组方法",
+              path: '/base/jsBasic/array/'
             },
             {
-              title: "CSS",
-              link: "/articles/CSS/",
+              title: "关于对象方法",
+              path: '/base/jsBasic/object/'
             },
           ]
         },
-        // {
-        //   title: "HTML",
-        //   link: "/articles/HTML/",
-        // },
-        // {
-        //   title: "CSS",
-        //   link: "/articles/CSS/",
-        // },
+        {
+          title: "CSS",
+          link: "/articles/CSS/",
+        },
       ],
-
+      '/article/': [
+        {
+          title: '技术文章',
+        }
+      ]
     },
 
 
