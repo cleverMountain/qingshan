@@ -1,5 +1,5 @@
 # 重写数组方法
-### forEach_filter_find_some_map_every_reduce
+## forEach__filter___find___some___map___every__reduce
 ### forEach
 ```js
 Array.prototype.forEach = function(cb, obj) {
@@ -88,7 +88,7 @@ Array.prototype.reduce = function(cb, initialValue) {
   return initialValue
 }
 ```
-## push_pop_shift_unshift
+## push__pop___shift__unshift
 ### push
 ```js
 // 改变原数组，返回长度
@@ -131,4 +131,41 @@ Array.prototype.unshift = function(item) {
   }
   return this.length
 }
+```
+
+## 其他方法
+### join
+```js
+// 分割数组，返回字符串长度
+Array.prototype.join = function (separator) {
+  separator = separator || ''
+  let res = ''
+  for (let i = 0; i < this.length; i++) {
+    res += this[i] + separator
+  }
+  return res.slice(0, res.length)
+}
+```
+### split
+```js
+// 将字符串组合成数组，并返回数组
+Array.prototype.split = function (separator) {
+  // separator = separator || ','
+  // let arr = ''
+  // for (let i = 0; i < this.length; i++) {
+  //   if (i < this.length - 1) {
+  //     str += this[i] + separator
+  //   } else {
+  //     str += this[i]
+  //   }
+  // }
+  // return str
+  if (separator) {
+    return [this]
+  } else {
+    // let index = 0
+    let index = this.
+  }
+}
+
 ```
