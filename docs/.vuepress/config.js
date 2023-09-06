@@ -41,6 +41,10 @@ module.exports = {
             {
               title: "集合",
               path: '/base/jsBasic/mapping/'
+            },
+            {
+              title: "函数",
+              path: '/base/jsBasic/function/'
             }
           ]
         },
