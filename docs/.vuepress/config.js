@@ -31,13 +31,17 @@ module.exports = {
           title: 'js相关',
           children: [
             {
-              title: "关于数组方法",
+              title: "重写数组方法",
               path: '/base/jsBasic/array/'
             },
             {
-              title: "关于对象方法",
+              title: "重写对象方法",
               path: '/base/jsBasic/object/'
             },
+            {
+              title: "集合",
+              path: '/base/jsBasic/mapping/'
+            }
           ]
         },
         {
