@@ -90,3 +90,81 @@ map.forEach((key, value, ori) => {
 })
 
 ```
+## Set
+```js
+class Set {
+  constructor(initial) {
+    let symbol = 'Symbol.iterator'
+    this.set = initial || []
+    
+  }
+  add(target) {
+    if (!this.set.has(target)) {
+      this.set.push(target)
+    }
+  }
+  has(target) {
+    return this.set.includes(target)
+  }
+  clear() {
+    this.set = []
+    return true
+  }
+  delete(target) {
+    if (this.set.has(target)) {
+      const index = this.set.indexOf(target)
+      this.set.splice(index, 1)
+      return true
+    } else {
+      return false
+    }
+  }
+  forEach(cb) {
+    for (let i = 0; i < this.set.length; i++) {
+      cb(this.set[i], i, this.set)
+    }
+  }
+  keys() {
+    return this.entries()
+  }
+  values() {
+    return this.entries()
+  }
+  // 生成器
+  entries() {
+    let index = 0
+    return {
+      next: () => {
+        if (index < this.set.length) {
+          return {
+            done: false,
+            value: this.set[index++]
+          }
+        } else {
+          return {
+            done: true,
+            value: undefined
+          }
+        }
+      }
+    }
+  }
+  // 可迭代属性
+  [Symbol.iterator]() {
+    return this.entries()
+  }
+}
+
+let set = new Set([1, 2, 3])
+const iterate = set.keys()
+console.log(iterate.next())
+// const iterate = set.entries()
+// console.log(iterate.next())
+// console.log(iterate.next())
+// console.log(iterate.next())
+// console.log(iterate.next())
+for(let k of set) {
+  console.log(k)
+}
+console.log(set)
+```
