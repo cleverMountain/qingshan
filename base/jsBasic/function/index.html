@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>bind_call_apply | 青山的博客</title>
+    <meta name="generator" content="VuePress 1.9.10">
+    
+    <meta name="description" content="Just a note about js">
+    
+    <link rel="preload" href="/qingshan/assets/css/0.styles.34be583b.css" as="style"><link rel="preload" href="/qingshan/assets/js/app.e3807ba7.js" as="script"><link rel="preload" href="/qingshan/assets/js/2.3dc1b8de.js" as="script"><link rel="preload" href="/qingshan/assets/js/1.54be531d.js" as="script"><link rel="preload" href="/qingshan/assets/js/27.6e60329b.js" as="script"><link rel="prefetch" href="/qingshan/assets/js/10.563984b0.js"><link rel="prefetch" href="/qingshan/assets/js/11.c389195a.js"><link rel="prefetch" href="/qingshan/assets/js/12.81539b0f.js"><link rel="prefetch" href="/qingshan/assets/js/13.4d4410c4.js"><link rel="prefetch" href="/qingshan/assets/js/14.37ef2a72.js"><link rel="prefetch" href="/qingshan/assets/js/15.5542c093.js"><link rel="prefetch" href="/qingshan/assets/js/16.d48fd1ce.js"><link rel="prefetch" href="/qingshan/assets/js/17.bd8d538c.js"><link rel="prefetch" href="/qingshan/assets/js/18.6d3b94c1.js"><link rel="prefetch" href="/qingshan/assets/js/19.eb35cfee.js"><link rel="prefetch" href="/qingshan/assets/js/20.7d8a0e52.js"><link rel="prefetch" href="/qingshan/assets/js/21.db1b5d88.js"><link rel="prefetch" href="/qingshan/assets/js/22.7714be7b.js"><link rel="prefetch" href="/qingshan/assets/js/23.ab0c91b4.js"><link rel="prefetch" href="/qingshan/assets/js/24.8431c80f.js"><link rel="prefetch" href="/qingshan/assets/js/25.095e4cbc.js"><link rel="prefetch" href="/qingshan/assets/js/26.443f1a04.js"><link rel="prefetch" href="/qingshan/assets/js/28.a691883d.js"><link rel="prefetch" href="/qingshan/assets/js/29.97e0afb7.js"><link rel="prefetch" href="/qingshan/assets/js/3.5322f14a.js"><link rel="prefetch" href="/qingshan/assets/js/4.84e1e480.js"><link rel="prefetch" href="/qingshan/assets/js/5.f0541060.js"><link rel="prefetch" href="/qingshan/assets/js/6.dfb06aa0.js"><link rel="prefetch" href="/qingshan/assets/js/7.7551a9fb.js"><link rel="prefetch" href="/qingshan/assets/js/vendors~docsearch.5e19b665.js">
+    <link rel="stylesheet" href="/qingshan/assets/css/0.styles.34be583b.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/qingshan/" class="home-link router-link-active"><!----> <span class="site-name">青山的博客</span></a> <div class="links"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"><div class="nav-item"><a href="/qingshan/" class="nav-link">
+  主页
+</a></div><div class="nav-item"><a href="/qingshan/base/" class="nav-link router-link-active">
+  基础知识
+</a></div><div class="nav-item"><a href="/qingshan/article/" class="nav-link">
+  技术文章
+</a></div> <!----></nav></div></header> <div class="sidebar-mask"></div> <aside class="sidebar"><nav class="nav-links"><div class="nav-item"><a href="/qingshan/" class="nav-link">
+  主页
+</a></div><div class="nav-item"><a href="/qingshan/base/" class="nav-link router-link-active">
+  基础知识
+</a></div><div class="nav-item"><a href="/qingshan/article/" class="nav-link">
+  技术文章
+</a></div> <!----></nav>  <ul class="sidebar-links"><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading open"><span>js相关</span> <span class="arrow down"></span></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/qingshan/base/jsBasic/array/" class="sidebar-link">重写数组方法</a></li><li><a href="/qingshan/base/jsBasic/object/" class="sidebar-link">重写对象方法</a></li><li><a href="/qingshan/base/jsBasic/mapping/" class="sidebar-link">集合</a></li><li><a href="/qingshan/base/jsBasic/function/" aria-current="page" class="active sidebar-link">函数</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/qingshan/base/jsBasic/function/#bind-call-apply" class="sidebar-link">bind_call_apply</a></li></ul></li></ul></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>CSS</span> <span class="arrow right"></span></p> <!----></section></li></ul> </aside> <main class="page"> <div class="theme-default-content content__default"><h2 id="bind-call-apply"><a href="#bind-call-apply" class="header-anchor">#</a> bind___call___apply</h2> <h3 id="call"><a href="#call" class="header-anchor">#</a> call</h3> <div class="language-js extra-class"><pre class="language-js"><code><span class="token comment">// 改变this，立即执行，返回执行结果,传入参数为普通参数</span>
+<span class="token class-name">Function</span><span class="token punctuation">.</span>prototype<span class="token punctuation">.</span><span class="token function-variable function">call</span> <span class="token operator">=</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token parameter">obj<span class="token punctuation">,</span> <span class="token operator">...</span>argues</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token comment">// this调用者的方法</span>
+  obj<span class="token punctuation">.</span>fn <span class="token operator">=</span> <span class="token keyword">this</span>
+  <span class="token comment">// this指向: 谁调用指向谁</span>
+  <span class="token keyword">let</span> res <span class="token operator">=</span> obj<span class="token punctuation">.</span><span class="token function">fn</span><span class="token punctuation">(</span><span class="token operator">...</span>argues<span class="token punctuation">)</span>
+  <span class="token keyword">delete</span> obj<span class="token punctuation">.</span>fn
+  <span class="token keyword">return</span> res
+<span class="token punctuation">}</span>
+</code></pre></div><h3 id="apply"><a href="#apply" class="header-anchor">#</a> apply</h3> <div class="language-js extra-class"><pre class="language-js"><code><span class="token comment">// 改变this，立即执行，返回执行结果,传入参数为数组</span>
+<span class="token class-name">Function</span><span class="token punctuation">.</span>prototype<span class="token punctuation">.</span><span class="token function-variable function">apply</span> <span class="token operator">=</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token parameter">obj<span class="token punctuation">,</span> argues</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  obj<span class="token punctuation">.</span>fn <span class="token operator">=</span> <span class="token keyword">this</span>
+  <span class="token keyword">let</span> res <span class="token operator">=</span> obj<span class="token punctuation">.</span><span class="token function">fn</span><span class="token punctuation">(</span><span class="token operator">...</span>argues<span class="token punctuation">)</span>
+  <span class="token keyword">delete</span> obj<span class="token punctuation">.</span>fn
+  <span class="token keyword">return</span> res
+<span class="token punctuation">}</span>
+</code></pre></div><h3 id="bind"><a href="#bind" class="header-anchor">#</a> bind</h3> <div class="language-js extra-class"><pre class="language-js"><code><span class="token comment">// 改变this，不立即执行，返回一个函数,传入参数为普通函数</span>
+<span class="token class-name">Function</span><span class="token punctuation">.</span>prototype<span class="token punctuation">.</span><span class="token function-variable function">bind</span> <span class="token operator">=</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token parameter">obj<span class="token punctuation">,</span> <span class="token operator">...</span>argues</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  obj<span class="token punctuation">.</span>fn <span class="token operator">=</span> <span class="token keyword">this</span>
+  <span class="token keyword">return</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">let</span> res <span class="token operator">=</span> obj<span class="token punctuation">.</span><span class="token function">fn</span><span class="token punctuation">(</span><span class="token operator">...</span>argues<span class="token punctuation">)</span>
+    <span class="token keyword">delete</span> obj<span class="token punctuation">.</span>fn
+    <span class="token keyword">return</span> res
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div></div> <footer class="page-edit"><!----> <!----></footer> <div class="page-nav"><p class="inner"><span class="prev">
+      ←
+      <a href="/qingshan/base/jsBasic/mapping/" class="prev">
+        集合
+      </a></span> <!----></p></div> </main></div><div class="global-ui"></div></div>
+    <script src="/qingshan/assets/js/app.e3807ba7.js" defer></script><script src="/qingshan/assets/js/2.3dc1b8de.js" defer></script><script src="/qingshan/assets/js/1.54be531d.js" defer></script><script src="/qingshan/assets/js/27.6e60329b.js" defer></script>
+  </body>
+</html>
