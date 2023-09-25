@@ -45,6 +45,10 @@ module.exports = {
             {
               title: "函数",
               path: '/base/jsBasic/function/'
+            },
+            {
+              title: '迭代器和生成器',
+              path: '/base/jsBasic/generate/'
             }
           ]
         },
