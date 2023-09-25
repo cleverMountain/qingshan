@@ -47,7 +47,7 @@ module.exports = {
               path: '/base/jsBasic/function/'
             },
             {
-              title: '迭代器和生成器',
+              title: '迭代器、生成器及可迭代对象',
               path: '/base/jsBasic/generate/'
             }
           ]

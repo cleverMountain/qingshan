@@ -27,21 +27,21 @@ a.next(); // {value: 1, done: false}
 
 // 生成器
 function myGenerate(fn, ...argue) {
-  let res = []
+  const iterator = []
   let index = 0
   // 2.遇见一次yield则收集一次结果
-  res.myYield = function (argue) {
-    res.push({
+  iterator.iteYield = function (argue) {
+    iterator.push({
       value: argue,
       index: ++index
     })
   }
   // 1.执行传入的函数
-  fn.call(res, ...argue)
+  fn.call(iterator, ...argue)
   // 绑定next函数
-  res.next = function () {
+  iterator.next = function () {
     // 迭代完毕
-    if (res.length <= 0) {
+    if (iterator.length <= 0) {
       return {
         value: undefined,
         done: true
@@ -49,20 +49,20 @@ function myGenerate(fn, ...argue) {
     } else {
       // 可继续迭代，每迭代一次，数组长度减1
       let obj = {
-        value: res[0].value,
+        value: iterator[0].value,
         done: false
       }
-      res.shift()
+      iterator.shift()
       return obj
     }
   }
   // 返回迭代器
-  return res
+  return iterator
 }
 
 function makeIterator(start = 0, end = Infinity, step = 1) {
   for (let i = start; i < end; i += step) {
-    this.myYield(i)
+    this.iteYield(i)
   }
 }
 const ite = myGenerate(makeIterator, 1, 10 ,3)
@@ -76,7 +76,7 @@ console.log(ite.next()) // {value: undefined, done: true}
 
 ## 迭代器
 1. 迭代器是一个对象
-2. 包含next方法，执行后返回index和done
+2. 实现了迭代器协议(Iterator Protocol)，该协议要求迭代器对象包含next方法，执行后返回index和done的对象
 3. 模拟数组的迭代器
 ```js
 const arr = [1, 2]
@@ -129,24 +129,55 @@ console.log(objIte.next()) // {key: undefined, value: undefined, done: true}
 2. 可使用for of进行迭代
 3. 自定义可迭代对象 
 ```js
-// 具有Symbol.iterator属性，该属性
+// 具有Symbol.iterator属性
+// Symbol.iterator属性是一个生成器函数，该函数返回next方法
 const iterableObject = {
-  [Symbol.iterator]: function() {
-    let count = 1;
+  [Symbol.iterator]: function () {
+    const obj = this
+    const res = Object.keys(obj)
+    const length = res.length
+    let index = 0
     return {
-      next: function() {
-        if (count <= 3) {
-          return { value: count++, done: false };
+      next: function () {
+        if (index < length) {
+          return {
+            value: {
+              key: res[index],
+              value: obj[res[index++]]
+            },
+            dnoe: false
+          }
         } else {
-          return { done: true };
+          return {
+            done: true
+          }
         }
       }
     };
-  }，
+  },
   a: 1,
   b: 2
 };
 for (let k of iterableObject) {
-
+  // {key: a, value: 1}
+  // {key: b, value: 2}
+  console.log(k)
 }
+```
+5. for of原理，通过可迭代对象执行for of时可以知道，for of会一直执行该迭代对象的next方法，知道该方法返回的done会true时则停止
+6. 实现for of
+```js
+const arr = [1, 2, 3]
+function forOf(iteObj) {
+  // 调用迭代对象方法返回迭代器
+  const iterator = iteObj[Symbol.iterator]()
+  // 执行next方法
+  let res = iterator.next()
+  // 直到返回done为true时停止
+  while(!res.done) {
+    console.log(res.value)
+    res = iterator.next()
+  }
+}
+forOf(arr)
 ```
