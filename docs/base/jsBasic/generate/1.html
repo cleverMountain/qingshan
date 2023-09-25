@@ -10,43 +10,19 @@
 
 <body>
   <script>
-    const iterableObject = {
-      [Symbol.iterator]: function () {
-        const obj = this
-        const res = Object.keys(obj)
-        const length = res.length
-        let index = 0
-        return {
-          next: function () {
-            if (index < length) {
-              return {
-                value: {
-                  key: res[index],
-                  value: obj[res[index++]]
-                },
-                dnoe: false
-              }
-            } else {
-              return {
-                done: true
-              }
-            }
-          }
-        };
-      },
-      a: 1,
-      b: 2
-    };
     const arr = [1, 2, 3]
-    function forOf(iteObj) {
+    function forOf(iteObj, cb) {
       const iterator = iteObj[Symbol.iterator]()
       let res = iterator.next()
       while(!res.done) {
-        console.log(res.value)
+        // console.log(res.value)
+        cb(res.value)
         res = iterator.next()
       }
     }
-    forOf(arr)
+    forOf(arr, (...argue) => {
+      console.log(...argue)
+    })
   </script>
 </body>
 

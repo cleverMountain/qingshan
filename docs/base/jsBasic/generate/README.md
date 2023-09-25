@@ -175,9 +175,13 @@ function forOf(iteObj) {
   let res = iterator.next()
   // 直到返回done为true时停止
   while(!res.done) {
-    console.log(res.value)
+    // 执行回调函数
+    cb(res.value)
     res = iterator.next()
   }
 }
-forOf(arr)
+// 执行forOf并传入回调函数 
+forOf(arr, (...argue) => {
+  console.log(...argue)
+})
 ```
