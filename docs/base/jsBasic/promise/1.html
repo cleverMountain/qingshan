@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+
+    class Promise {
+      constructor(fn) {
+        // 处理resolve
+        const resolve = (value) => {
+          if (this.status === 'pending') {
+            this.value = value
+            this.status = 'fulfilled'
+            // 执行成功的回调
+            this.successCbs.forEach(cb => cb(value))
+          }
+        }
+        // 处理reject
+        const reject = (error) => {
+          if (this.status === 'pending') {
+            this.error = error
+            this.status = 'rejected'
+            // 执行失败的回调
+            this.failCbs.forEach(cb => cb(error))
+          }
+        }
+        // 初始状态
+        this.status = 'pending'
+        this.successCbs = []
+        this.failCbs = []
+        this.value = ''
+        this.error = ''
+        try {
+          fn(resolve, reject)
+        } catch (err) {
+          console.log(err)
+        }
+      }
+      // then方法
+      then(resolve, reject) {
+        if (this.status === 'fulfilled') {
+          let res = resolve(this.value)
+          return new Promise((resolve1, reject1) => {
+            resolve1(res)
+          })
+        }
+        if (this.status === 'rejected') {
+          let res = reject(this.value)
+          return new Promise((resolve1, reject1) => {
+            reject1(res)
+          })
+        }
+        // 收集函数
+        if (this.status === 'pending') {
+          debugger
+          this.successCbs.push(resolve)
+          this.failCbs.push(reject)
+        }
+      }
+    }
+    const p = new Promise((resolve, reject) => {
+      setTimeout(() => {
+        reject(1)
+      }, 2000)
+    })
+    p.then(res => {
+      console.log(res, 'res')
+    }, err => {
+      console.log(err, 'err')
+      return 2
+    })
+    // console.log(p)
+    console.log(p)
+    p.then(res => {
+
+    }, reject => {
+      console.log(reject, '321')
+    })
+  </script>
+</body>
+
+</html>

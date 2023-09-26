@@ -124,7 +124,7 @@ console.log(objIte.next()) // {key: b, value: 2, done: false}
 console.log(objIte.next()) // {key: undefined, value: undefined, done: true}
 ```
 
-### 可迭代对象
+## 可迭代对象
 1. 可迭代对象具备Symbol.iterator属性
 2. 可使用for of进行迭代
 3. 自定义可迭代对象 

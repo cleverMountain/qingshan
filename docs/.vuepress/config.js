@@ -49,6 +49,10 @@ module.exports = {
             {
               title: '迭代器、生成器及可迭代对象',
               path: '/base/jsBasic/generate/'
+            },
+            {
+              title: 'Promise',
+              path: '/base/jsBasic/promise/'
             }
           ]
         },
