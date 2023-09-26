@@ -1,12 +1,12 @@
 ## PromiseA+规范
-
-
-## 实现Promise
 1. promise是一个对象，包含三个状态pending，fulfilled，rejected ，但同时只能为一个状态
 2. pending 状态时，可能会转变为 fulfilled 或 rejected 状态
 3. fulfilled 状态时，不能再状态为任何其他状态， 必须有一个 value，且不可改变
 4. rejected 状态时, 不能再状态为任何其他状态，必须有一个 reason，且不可改变
 5. 一个 promise 必须提供一个 then 方法，用来获取当前或最终的 value 或 reason，并接受两个参数
+
+## 实现Promise
+
 - 1.最基本的Promise实现
 ```js
 class Promise {
@@ -31,6 +31,7 @@ class Promise {
     } catch (err) {
       console.log(err)
     }
+  }
   // then方法
   then(cb) {
     if (this.status === 'fulfilled') {
@@ -118,4 +119,90 @@ then(resolve, reject) {
     this.failCbs.push(reject)
   }
 }
+```
+
+
+
+## async与await
+1. async/await是一种语法糖
+2. async函数会返回一个promise对象
+3. await等待结果执行  
+```js
+async function getResult() {
+  await new Promise((resolve, reject) => {
+    setTimeout(() => {
+        resolve(1);
+    });
+  })
+  await new Promise((resolve, reject) => {
+    setTimeout(() => {
+        resolve(2);
+    });
+  })
+  await new Promise((resolve, reject) => {
+    setTimeout(() => {
+        resolve(3);
+    });
+  })
+}
+
+getResult() //  分别输出1,2,3
+```
+3. 通过上面的运行来看await似乎生成器函数有某种关系
+```js
+function* generate() {
+  yield new Promise(resolve => {
+    setTimeout(() => {
+      resolve(1)
+    })
+  })
+  yield new Promise(resolve => {
+    setTimeout(() => {
+      resolve(2)
+    })
+  })
+  yield new Promise(resolve => {
+    setTimeout(() => {
+      resolve(3)
+    })
+  })
+}
+const ite = generate()
+console.log(ite.next().value.then(res => console.log(res))) // 1
+console.log(ite.next().value.then(res => console.log(res))) // 2
+console.log(ite.next().value.then(res => console.log(res))) // 3
+```
+4.如果有几个yield就要执行几次next，通过递归实现
+```js
+function* generate() {
+  yield new Promise(resolve => {
+    setTimeout(() => {
+      resolve(1)
+    })
+  })
+  yield new Promise(resolve => {
+    setTimeout(() => {
+      resolve(2)
+    })
+  })
+  yield new Promise(resolve => {
+    setTimeout(() => {
+      resolve(3)
+    })
+  })
+}
+const ite = generate()
+// co函数
+const co = (iterator, data = []) => {
+  const obj = iterator.next()
+  if (obj.done) {
+    return
+  } else {
+    obj.value.then(res => {
+      data.push(res)
+      return co(iterator, data)
+    })
+  }
+}
+co(ite)
 ```

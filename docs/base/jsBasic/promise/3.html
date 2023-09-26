@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    function myGenerate(fn, ...argue) {
+      const iterator = []
+      let index = 0
+      // 2.遇见一次yield则收集一次结果
+      iterator.iteYield = function (argue) {
+        iterator.push({
+          value: argue,
+          index: ++index
+        })
+      }
+      iterator.await = function () {
+        
+      }
+      // 1.执行传入的函数
+      fn.call(iterator, ...argue)
+      // 绑定next函数
+      iterator.next = function () {
+        // 迭代完毕
+        if (iterator.length <= 0) {
+          return {
+            value: undefined,
+            done: true
+          }
+        } else {
+          // 可继续迭代，每迭代一次，数组长度减1
+          let obj = {
+            value: iterator[0].value,
+            done: false
+          }
+          iterator.shift()
+          return obj
+        }
+      }
+      // 返回迭代器
+      return iterator
+    }
+    const getRes = () => {
+      return Promise.resolve(1)
+    }
+    function get() {
+      let res = this.await(getRes())
+      debugger
+      console.log(res)
+      console.log('312')
+    }
+    myGenerate(get)
+  </script>
+</body>
+
+</html>

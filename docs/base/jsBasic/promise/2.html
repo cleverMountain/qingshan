@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    function* generate() {
+      yield new Promise(resolve => {
+        setTimeout(() => {
+          console.log(1)
+          resolve(1)
+        })
+      })
+      console.log(2)
+      yield new Promise(resolve => {
+        setTimeout(() => {
+          console.log(3)
+          resolve(2)
+        })
+      })
+      console.log(4)
+      yield new Promise(resolve => {
+        setTimeout(() => {
+          console.log(5)
+          resolve(3)
+        })
+      })
+      console.log(6)
+    }
+    const ite = generate()
+    // co函数
+    const co = (iterator, data = []) => {
+      const obj = iterator.next()
+      if (obj.done) {
+        return
+      } else {
+        obj.value.then(res => {
+          data.push(res)
+          return co(iterator, data)
+        })
+      }
+
+    }
+    co(ite)
+  </script>
+</body>
+
+</html>
