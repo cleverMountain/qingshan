@@ -22,7 +22,11 @@ module.exports = {
       {
         text: "技术文章",
         link: "/article/",
-      }
+      },
+      {
+        text: '源码系列',
+        link: '/original/'
+      },
     ],
 
     sidebar: {
@@ -65,10 +69,12 @@ module.exports = {
         {
           title: '技术文章',
         }
+      ],
+      '/original/': [
+        {
+          title: '源码系列',
+        }
       ]
-    },
-
-
-
+    }
   }
 }
