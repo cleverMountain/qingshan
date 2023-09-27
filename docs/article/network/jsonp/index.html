@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    function jsonp(url, params) {
+      return new Promise(resolve => {
+        // 组装url
+        const cllback = 'jsonpCallback'
+        url += '?' + 'callback' + '=' + cllback
+        if (Object.keys.length > 0) {
+          for (let key in params) {
+            url += '&' + key + '=' + params[key]
+          }
+        }
+        // 添加script标签
+        const script = document.createElement("script");
+        script.src = url;
+        // 发起请求
+        document.body.appendChild(script);
+        window.jsonpCallback = function (data) {
+          // 成功返回数据
+          resolve(data)
+          document.body.removeChild(script)
+        }
+      })
+    }
+    jsonp('http://localhost:3000/api/data').then(res => {
+      console.log(res)
+    })
+  </script>
+</body>
+
+</html>
