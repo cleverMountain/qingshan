@@ -67,7 +67,17 @@ module.exports = {
       ],
       '/article/': [
         {
-          title: '技术文章',
+          title: '网络',
+          children: [
+            {
+              title: 'jsonp',
+              path: '/article/network/jsonp/'
+            },
+          ]
+        },
+        {
+          title: '其他',
+          link: '/article/other/'
         }
       ],
       '/original/': [
