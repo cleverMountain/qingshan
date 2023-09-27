@@ -10,7 +10,49 @@
 
 <body>
   <script>
-
+    function resolvePromise(promise2, res, resolve, reject) {
+      /**
+       * then(res => {
+       *        return 1 || obj || Promise
+       *      }
+       * res 可能是undefined  或者是任意 或者promise
+      */
+      let called = false;
+      if (promise2 !== res) {
+        if (res instanceof Promise) {
+          res.then(ret => {
+            resolvePromise(promise2, ret, resolve, reject)
+          }, err => {
+            reject(err)
+          })
+        } else if (res !== null && (typeof res === 'object' || typeof res === 'function')) {
+          const then = res.then;
+          if (typeof then === 'function') { // 如果 then 是函数
+            // 使用 res 作为上下文调用 then 方法，传入了两个参数 成功回调，失败回调
+            then.call(
+              res,
+              y => { // 成功回调
+                if (called) return; // 如果已经调用过，直接返回
+                called = true;
+                // 递归处理 y
+                resolvePromise(promise2, y, resolve, reject);
+              },
+              reason => { // 失败回调
+                if (called) return; // 如果已经调用过，直接返回
+                called = true;
+                reject(reason);
+              }
+            );
+          } else { // 如果 then 不是函数
+            // 直接调用 resolve 一般对象
+            resolve(res);
+          }
+        } else {
+          // return 1之类的
+          resolve(res)
+        }
+      }
+    }
     class Promise {
       constructor(fn) {
         // 处理resolve
@@ -44,45 +86,187 @@
         }
       }
       // then方法
-      then(resolve, reject) {
-        if (this.status === 'fulfilled') {
-          let res = resolve(this.value)
-          return new Promise((resolve1, reject1) => {
-            resolve1(res)
-          })
-        }
-        if (this.status === 'rejected') {
-          let res = reject(this.value)
-          return new Promise((resolve1, reject1) => {
-            reject1(res)
-          })
-        }
-        // 收集函数
-        if (this.status === 'pending') {
-          debugger
-          this.successCbs.push(resolve)
-          this.failCbs.push(reject)
-        }
+      then(onFulfilled, onRejected) {
+        const promise2 = new Promise((resolve, reject) => {
+          if (this.status === 'fulfilled') {
+            setTimeout(() => {
+              let res = onFulfilled(this.value) // 第一次执行成功后then的结果
+              resolvePromise(promise2, res, resolve, reject)
+            })
+
+          } else if (this.status === 'rejected') {
+            setTimeout(() => {
+              let err = onRejected(this.error) // 第一次执行失败后then的结果
+              resolvePromise(promise2, err, resolve, reject)
+            })
+          } else {
+            this.successCbs.push(() => {
+              setTimeout(() => {
+                let res = onFulfilled(this.value) // 第一次执行成功后then的结果
+                resolvePromise(promise2, res, resolve, reject)
+              })
+            })
+            this.failCbs.push(() => {
+              setTimeout(() => {
+                let err = onRejected(this.error) // 第一次执行失败后then的结果
+                resolvePromise(promise2, err, resolve, reject)
+              })
+            })
+          }
+        })
+        return promise2
+      }
+      static resolve(value) {
+        return new Promise(resolve => {
+          resolve(value)
+        })
+      }
+      catch(reject) {
+        return this.then(resolve, reject)
+      }
+      static reject(error) {
+        return new Promise((resolve, reject) => {
+          reject(error)
+        })
+      }
+      static all(argue) {
+        return new Promise((resolve, reject) => {
+          const res = []
+          let resLength = 0 // 结果长度
+          for (let i = 0; i < argue.length; i++) {
+            const item = argue[i]
+            if (item instanceof Promise) {
+              // promise
+              item.then(ret => {
+                // 保证peomise的顺序及每个promise拿到结果后再返回
+                res[i] = ret
+                resLength++
+                // 相等时才返回
+                if (resLength === argue.length) {
+                  resolve(res)
+                }
+              })
+            } else {
+              // 普通值
+              res.push(item)
+              resLength++
+              if (resLength === argue.length) {
+                resolve(res)
+              }
+            }
+          }
+        })
+      }
+      static any(argue) {
+        // 判断有没有promise
+        return new Promise(resolve => {
+          for (let i = 0; i < argue.length; i++) {
+            const item = argue[i]
+            if (item instanceof Promise) {
+
+              item.then(res => {
+                resolve(res)
+              }, err => {
+                // inject停止
+                return
+              })
+            } else {
+              resolve(argue[i])
+            }
+          }
+        })
+      }
+      static race(argue) {
+        return new Promise(resolve => {
+          for (let i = 0; i < argue.length; i++) {
+            const item = argue[i]
+            if (item instanceof Promise) {
+              item.then(res => {
+                resolve(res)
+              })
+            } else {
+              resolve(argue[i])
+            }
+          }
+        })
+      }
+      static allSettled(argue) {
+        return new Promise((resolve, reject) => {
+          const res = []
+          let resLength = 0 // 结果长度
+          for (let i = 0; i < argue.length; i++) {
+            const item = argue[i]
+            if (item instanceof Promise) {
+              // promise
+              item.then(ret => {
+                // 保证peomise的顺序及每个promise拿到结果后再返回
+                res[i] = {
+                  status: "fulfilled",
+                  value: ret,
+                }
+                resLength++
+                // 相等时才返回
+                if (resLength === argue.length) {
+                  resolve(res)
+                }
+              }, err => {
+                res[i] = {
+                  status: "rejected",
+                  value: err,
+                }
+                resLength++
+                // 相等时才返回
+                if (resLength === argue.length) {
+                  resolve(res)
+                }
+              })
+            } else {
+              // 普通值
+              res.push({
+                status: "fulfilled",
+                value: argue[i],
+              })
+              resLength++
+              if (resLength === argue.length) {
+                resolve(res)
+              }
+            }
+          }
+        })
       }
     }
-    const p = new Promise((resolve, reject) => {
-      setTimeout(() => {
-        reject(1)
-      }, 2000)
-    })
-    p.then(res => {
-      console.log(res, 'res')
-    }, err => {
-      console.log(err, 'err')
-      return 2
+    // const p = new Promise((resolve, reject) => {
+    //   resolve(1)
+    // })
+    // let b = p.then(res => {
+    //   console.log(res, 'res')
+    //   return {
+    //     a: 1,
+    //     then: function (resolve, reject) {
+    //       resolve('来了')
+    //     }
+    //   }
+    // })
+    // // console.log(p)
+    // console.log(b)
+
+    // b.then(res => {
+    //   console.log(res)
+    // }, reject => {
+    //   console.log(reject, '321')
+    // })
+    // const p1 = 1
+    const p2 = 2
+    const p3 = new Promise((resolve, reject) => {
+      setTimeout(reject, 4000, '3');
+    });
+    const p4 = new Promise((resolve, reject) => {
+      setTimeout(resolve, 100, '4');
+    });
+    let p = Promise.allSettled([p2, p3, p4]).then(res => {
+      console.log(res)
     })
     // console.log(p)
-    console.log(p)
-    p.then(res => {
-
-    }, reject => {
-      console.log(reject, '321')
-    })
   </script>
 </body>
 
