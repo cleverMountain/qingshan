@@ -1,5 +1,8 @@
 
 ## call
+1. 改变this指向
+2. 参数不为数组
+3. 立即执行,返回结果
 ```js
 // 改变this，立即执行，返回执行结果,传入参数为普通参数
 Function.prototype.call = function(obj, ...argues) {
@@ -12,6 +15,9 @@ Function.prototype.call = function(obj, ...argues) {
 }
 ```
 ## apply
+1. 改变this指向
+2. 参数为数组
+3. 立即执行,返回结果
 ```js
 // 改变this，立即执行，返回执行结果,传入参数为数组
 Function.prototype.apply = function(obj, argues) {
@@ -22,6 +28,9 @@ Function.prototype.apply = function(obj, argues) {
 }
 ```
 ## bind
+1. 改变this指向
+2. 参数不为数组
+3. 返回一个新的函数
 ```js
 // 改变this，不立即执行，返回一个函数,传入参数为普通函数
 Function.prototype.bind = function(obj, ...argues) {

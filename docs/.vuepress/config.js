@@ -35,12 +35,16 @@ module.exports = {
           title: 'js相关',
           children: [
             {
-              title: "重写数组方法",
+              title: "Array",
               path: '/base/jsBasic/array/'
             },
             {
-              title: "重写对象方法",
+              title: "Object",
               path: '/base/jsBasic/object/'
+            },
+            {
+              title: "String",
+              path: '/base/jsBasic/string/'
             },
             {
               title: "集合",

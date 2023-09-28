@@ -1,6 +1,5 @@
 # 重写数组方法
-## forEach__filter___find___some___map___every__reduce
-### forEach
+## forEach
 ```js
 Array.prototype.forEach = function(cb, obj) {
   const _this = this
@@ -9,7 +8,7 @@ Array.prototype.forEach = function(cb, obj) {
   }
 }
 ```
-### filter
+## filter
 ```js
 Array.prototype.filter = function(cb, obj) {
   const _this = this
@@ -23,7 +22,7 @@ Array.prototype.filter = function(cb, obj) {
   return res
 }
 ```
-### find
+## find
 ```js
 Array.prototype.find = function(cb, obj) {
   const _this = this
@@ -35,7 +34,7 @@ Array.prototype.find = function(cb, obj) {
   }
 }
 ```
-### map
+## map
 ```js
 Array.prototype.map = function(cb, obj) {
   const _this = this
@@ -47,7 +46,7 @@ Array.prototype.map = function(cb, obj) {
   return res
 }
 ```
-### some
+## some
 ```js
 Array.prototype.some = function(cb, obj) {
   const _this = this
@@ -62,7 +61,7 @@ Array.prototype.some = function(cb, obj) {
   return res
 }
 ```
-### every
+## every
 ```js
 Array.prototype.every = function(cb, obj) {
   const _this = this
@@ -77,7 +76,7 @@ Array.prototype.every = function(cb, obj) {
   return res
 }
 ```
-### reduce
+## reduce
 ```js
 Array.prototype.reduce = function(cb, initialValue) {
   const _this = this
@@ -88,8 +87,8 @@ Array.prototype.reduce = function(cb, initialValue) {
   return initialValue
 }
 ```
-## push__pop___shift__unshift
-### push
+
+## push
 ```js
 // 改变原数组，返回长度
 Array.prototype.push = function(item) {
@@ -97,7 +96,7 @@ Array.prototype.push = function(item) {
   return this.length
 }
 ```
-### pop
+## pop
 ```js
 // 删除最后一个元素并返回删除的元素
 Array.prototype.pop = function() {
@@ -106,7 +105,7 @@ Array.prototype.pop = function() {
   return res
 }
 ```
-### shift
+## shift
 ```js
 // 删除第一个元素并返回删除的元素
 Array.prototype.shift = function() {
@@ -118,7 +117,7 @@ Array.prototype.shift = function() {
   return res
 }
 ```
-### unshift
+## unshift
 ```js
 // 在开始处添加元素并返回长度
 Array.prototype.unshift = function(item) {
@@ -133,8 +132,7 @@ Array.prototype.unshift = function(item) {
 }
 ```
 
-## 其他方法
-### join
+## join
 ```js
 // 分割数组，返回字符串长度
 Array.prototype.join = function (separator) {
@@ -146,7 +144,7 @@ Array.prototype.join = function (separator) {
   return res.slice(0, res.length)
 }
 ```
-### split
+## split
 ```js
 // 将字符串组合成数组，并返回数组
 Array.prototype.split = function (separator) {
