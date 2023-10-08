@@ -32,10 +32,24 @@ String.prototype.concat = function() {
 ```
 
 ## String.prototype.endsWith
-1. 判断是否含有以某个字符串
+1. 判断是否含有以某个字符串结尾
 2. 两个参数，一个为目标字符串，一个为下标位置，默认为目标字符串长度
 ```js
 String.prototype.endsWith = function(target, length = target.length) {
+  let res = ''
+  const allLnegth = this.length
+  for(let i = allLength - length; i++; i < allLength) {
+    res += this[i]
+  }
+  return res === target ? true :  false
+}
+```
+
+## String.prototype.includes
+1. 判断是否含有以某个字符串
+2. 两个参数，一个为目标字符串，一个为下标位置，默认为0
+```js
+String.prototype.includes = function(target, length = 0) {
   let res = ''
   const allLnegth = this.length
   for(let i = allLength - length; i++; i < allLength) {

@@ -89,7 +89,7 @@ module.exports = {
           title: 'vue',
           children: [
             {
-              title: 'ref',
+              title: 'vue3代理',
               path: '/original/vue/proxy/'
             }
           ]
