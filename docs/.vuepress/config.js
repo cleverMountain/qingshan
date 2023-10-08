@@ -86,7 +86,13 @@ module.exports = {
       ],
       '/original/': [
         {
-          title: '源码系列',
+          title: 'vue',
+          children: [
+            {
+              title: 'ref',
+              path: '/original/vue/proxy/'
+            }
+          ]
         }
       ]
     }
