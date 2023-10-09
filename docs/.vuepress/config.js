@@ -81,7 +81,17 @@ module.exports = {
         },
         {
           title: '其他',
-          link: '/article/other/'
+          children: [
+            {
+              title: '算法',
+              children: [
+                {
+                  title: '双指针类',
+                  path: '/article/other/math/two/'
+                }
+              ]
+            },
+          ]
         }
       ],
       '/original/': [
