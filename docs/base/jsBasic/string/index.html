@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    function customIncludes(sourceString, targetString, index = 0) {
+      // 遍历源字符串的每个字符
+      let first = targetString[0]
+      const length = targetString.length
+      let res = 0
+      // 收集可能性
+      const kinds = []
+      const indexS = []
+      for (let i = index; i <= sourceString.length; i++) {
+        if (sourceString[i] === first) {
+          let str = ''
+          for(let j = i; j < length + i; j++) {
+            str += sourceString[j]
+          }
+          kinds.push(str)
+          indexS.push(i)
+        }
+      }
+      console.log(indexS)
+      for(let k = 0 ; k < kinds.length; k++) {
+        if (kinds[k] === targetString) {
+        
+          res = indexS[k]
+        }
+      }
+      return res
+    }
+
+    // 使用自定义的includes方法检查字符串包含
+    const sourceStr = "W211";
+    const targetStr = "11";
+    console.log(customIncludes(sourceStr, targetStr, 2)); // true
+
+  </script>
+</body>
+
+</html>
