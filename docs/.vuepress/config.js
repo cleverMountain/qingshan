@@ -101,7 +101,16 @@ module.exports = {
             {
               title: 'vue3代理',
               path: '/original/vue/proxy/'
-            }
+            },
+          ]
+        },
+        {
+          title: 'axios',
+          children: [
+            {
+              title: '阅读源码',
+              path: '/original/axios/read/'
+            },
           ]
         }
       ]
