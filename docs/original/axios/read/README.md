@@ -163,3 +163,39 @@ utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
     return promise;
   }
 ```
+
+
+6. 关于请求拦截和响应拦截的Promise链
+
+<img src="./axios2.png"  alt="图片描述">
+
+```js
+const chain = [dispatchRequest.bind(this), undefined];
+// 当没有请求拦截时
+promsie = dispatchRequest.bind(this)() // 发起请求
+promise.then() // 拿到响应结果
+
+// 当存在请求拦截或者响应拦截时
+// 获取请求拦截器
+const requestInterceptorChain = [];
+let synchronousRequestInterceptors = true;
+this.interceptors.request.forEach(function unshiftRequestInterceptors(interceptor) {
+  // 成功回调，失败回调
+  requestInterceptorChain.unshift(interceptor.fulfilled, interceptor.rejected);
+});
+// 获取响应拦截器
+const responseInterceptorChain = [];
+this.interceptors.response.forEach(function pushResponseInterceptors(interceptor) {
+  // 成功回调，失败回调
+  responseInterceptorChain.push(interceptor.fulfilled, interceptor.rejected);
+});
+// 请求拦截添加在前
+chain.unshift.apply(chain, requestInterceptorChain);
+chain.push.apply(chain, responseInterceptorChain);
+// 最后得到的chain
+const chain = [resolveQuest, rejectQuest, dispatchRequest.bind(this), undefined, resolveResponse, rejectResponse];
+// 通过循环得到最后的promise
+while(chain.length > 0) {
+  promise = promise.then(chain.shift(), chain.shift())
+}
+```
