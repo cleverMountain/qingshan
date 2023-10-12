@@ -108,9 +108,17 @@ module.exports = {
           title: 'axios',
           children: [
             {
-              title: '阅读源码',
+              title: '源码',
               path: '/original/axios/read/'
             },
+            {
+              title: '自己的简易axios',
+              path: '/original/axios/self/'
+            },
+            {
+              title: '关于Promise数组链',
+              path: '/original/axios/chain/'
+            }
           ]
         }
       ]

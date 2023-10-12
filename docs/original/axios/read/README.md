@@ -199,3 +199,53 @@ while(chain.length > 0) {
   promise = promise.then(chain.shift(), chain.shift())
 }
 ```
+
+
+7. ajax请求
+```js
+function xhrAdapter(config) {
+  let xhr
+  const { url, method, params, cancelToken } = config
+  // 简单的ajax封装
+  return new Promise((resolve, reject) => {
+    xhr = new XMLHttpRequest()
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === 4) {
+        if ((xhr.status >= 200 && xhr.status < 300)) {
+          resolve(1)
+        }
+      }
+    }
+    xhr.open(method, url, true)
+    xhr.send()
+    if (cancelToken) {
+      console.log(cancelToken)
+      cancelToken.promise.then(() => {
+        // 存在cancelToken时取消请求，resolvePromise调用时触发
+        console.log('取消请求')
+        xhr.abort()
+      }, () => {
+      })
+    }
+  })
+};
+```
+
+8.cancelToken取消请求,在config传入时new CancelToken((c) => can = c), can会被赋值成回调函数function cancel() { resolvePromise() }，当can执行时can()，resolvePromise()执行，返回成功的Promise，此时在xhrAdapter中调用xhr.abort()，取消请求完成
+```js
+class CancelToken {
+  constructor(executor) {
+    // 执行器函数必须是函数
+    if (typeof executor !== 'function') {
+      throw new TypeError('executor must be a function.');
+    }
+    let resolvePromise;
+    this.promise = new Promise((resolve) => {
+      resolvePromise = resolve;
+    });
+    executor(function cancel() {
+      resolvePromise();
+    });
+  }
+}
+```
