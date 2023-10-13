@@ -102,6 +102,19 @@ module.exports = {
               title: 'vue3代理',
               path: '/original/vue/proxy/'
             },
+            {
+              title: 'vuex',
+              children: [
+                {
+                  title: '源码',
+                  path: '/original/vue/vuex/read/'
+                },
+                {
+                  title: '完成自己的vuex',
+                  path: '/original/vue/vuex/self/'
+                }
+              ]
+            }
           ]
         },
         {
