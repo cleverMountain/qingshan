@@ -112,6 +112,10 @@ module.exports = {
                 {
                   title: '完成自己的vuex',
                   path: '/original/vue/vuex/self/'
+                },
+                {
+                  title: '命名空间',
+                  path: '/original/vue/vuex/nameSpace/'
                 }
               ]
             }
