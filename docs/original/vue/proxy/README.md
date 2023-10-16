@@ -106,3 +106,164 @@ class RefImpl {
   }
 }
 ```
+
+## toRef(toRefs)
+1. 将传入的值转化成ref，分4种情况
+- 传入的ref，返回ref
+- 传入的函数
+- 仅仅传入的是对象
+- 传入的是对象，对象的key及默认值
+2. 通过isRef判断，当前对象是否存在__v_isRef属性
+3. toRefs将对象的每个属性toref后再覆盖原属性
+```js
+function toRef(source, key, defaultValue) {
+  // 是ref直接返回
+  if (isRef(source)) {
+    return source;
+  } else if (isFunction(source)) {
+    return new GetterRefImpl(source);
+  } else if (isObject(source) && arguments.length > 1) {
+    return propertyToRef(source, key, defaultValue);
+  } else {
+    // 不是再通过ref包装一下
+    return ref(source);
+  }
+}
+function isRef(r) {
+  return !!(r && r.__v_isRef === true);
+}
+// 传入的是函数
+class GetterRefImpl {
+  constructor(_getter) {
+    this._getter = _getter;
+    this.__v_isRef = true; // ref标志
+    this.__v_isReadonly = true;
+  }
+  get value() {
+    // .value是调用该方法，结果：value || undefined
+    return this._getter();
+  }
+}
+// 传入的是对象，对象的key及默认值
+const obj = {}
+toRef(obj, 'a', 1)
+function propertyToRef(source, key, defaultValue) {
+  const val = source[key];
+  // 非ref返回ObjectRefImpl
+  return isRef(val) ? val : new ObjectRefImpl(
+    source,
+    key,
+    defaultValue
+  );
+}
+class ObjectRefImpl {
+  constructor(_object, _key, _defaultValue) {
+    this._object = _object;
+    this._key = _key;
+    this._defaultValue = _defaultValue;
+    this.__v_isRef = true;
+  }
+  // .value返回传入的默认值
+  get value() {
+    const val = this._object[this._key];
+    return val === void 0 ? this._defaultValue : val;
+  }
+  set value(newVal) {
+    this._object[this._key] = newVal;
+  }
+  get dep() {
+    return getDepFromReactive(toRaw(this._object), this._key);
+  }
+}
+// toRefs
+function toRefs(object) {
+  const ret = isArray(object) ? new Array(object.length) : {};
+  for (const key in object) {
+    ret[key] = propertyToRef(object, key);
+  }
+  return ret;
+}
+```
+
+## createApp
+1. 创建一个初步的app
+-  创建app的过程： 1.ensureRenderer()
+                  2.createRenderer()
+                  3.baseCreateRenderer()
+                  4.createApp()
+                  5.createAppApi()
+- createAppApi过程
+2. 创建app的准备
+```js
+function ensureRenderer() {
+  renderer = renderer || createRenderer(rendererOptions)
+  return renderer
+}
+function createRenderer(options) {
+  return baseCreateRenderer(options);
+}
+function baseCreateRenderer(options, createHydrationFns) {
+  return {
+    render,
+    hydrate,
+    createApp: createAppAPI(render, hydrate)
+  };
+}
+const createApp = (...args) => {
+  /**
+   * 返回的app
+   * {
+   *   render,
+   *   hydrate,
+   *   createApp: createAppApi
+   * }
+   */
+  const app = ensureRenderer()
+  // 调用app.createApp其实是调用createAppApi
+  app = app.createApp(...args);
+  ....
+}
+```
+3. createAppApi过程
+```js
+// 在app上添加其他属性use,mixin,component,directive等
+function createAppAPI(render, hydrate) {
+  return function createApp(rootComponent, rootProps = null) {
+    const context = createAppContext();
+    const app = context.app = {
+      _uid: uid$1++,
+      _component: rootComponent,
+      _props: rootProps,
+      _container: null,
+      _context: context,
+      _instance: null,
+      version,
+      get config() {
+      },
+      set config(v) {
+      },
+      use
+      mixin,
+      component,
+      directive,
+      mount, // 最开始的mount方法，后面会重写
+      unmoun,
+      provide,
+      runWithContext
+    };
+    return app;
+  };
+}
+```
+
+4. 重写改mount方法
+```js
+const createApp = (...args) => {
+  const app = ensureRenderer()
+  app = app.createApp(...args);
+  const { mount } = app;
+  app.mount = () => {}
+  return app;
+}
+```
+
