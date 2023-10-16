@@ -222,3 +222,5 @@ replacdState(options) {
   }
 }
 ```
+
+8. github地址:  <https://github.com/cleverMountain/store>
