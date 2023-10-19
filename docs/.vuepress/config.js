@@ -137,6 +137,19 @@ module.exports = {
               path: '/original/axios/chain/'
             }
           ]
+        },
+        {
+          title: 'lodash',
+          children: [
+            {
+              title: '整体结构',
+              path: '/original/lodash/all/'
+            },
+            {
+              title: '函数部分',
+              path: '/original/lodash/function/'
+            }
+          ]
         }
       ]
     }

@@ -261,9 +261,99 @@ function createAppAPI(render, hydrate) {
 const createApp = (...args) => {
   const app = ensureRenderer()
   app = app.createApp(...args);
-  const { mount } = app;
-  app.mount = () => {}
+  const { mount } = app; // 挂载中使用
+  app.mount = () => {} // 重写mount方法
   return app;
 }
 ```
 
+
+## app.mount('#app')
+- 获取到app后，通过mount方法挂载到id为#app的容器
+1. app.mount方法
+```js
+app.mount = (containerOrSelector) => {
+  // 获取容器
+  const container = normalizeContainer(containerOrSelector);
+  // 获取component属性
+  const component = app._component;
+  // component添加template属性
+  component.template = container.innerHTML;
+  /**
+   * {
+   *   setup,
+   *   template
+   * }
+  */
+  container.innerHTML = "";
+  const proxy = mount(container, false, container instanceof SVGElement);
+  return proxy;
+}
+```
+
+2. mount，挂载模板过程
+```js
+mount(rootContainer, isHydrate, isSVG) {
+  if (!isMounted) {
+    const vnode = createVNode(
+      rootComponent,
+      rootProps
+    );
+    vnode.appContext = context;
+    {
+      context.reload = () => {
+        render(cloneVNode(vnode), rootContainer, isSVG);
+      };
+    }
+    if (isHydrate && hydrate) {
+      hydrate(vnode, rootContainer);
+    } else {
+      render(vnode, rootContainer, isSVG);
+    }
+    isMounted = true;
+    app._container = rootContainer;
+    rootContainer.__vue_app__ = app;
+    {
+      app._instance = vnode.component;
+      devtoolsInitApp(app, version);
+    }
+    return getExposeProxy(vnode.component) || vnode.component.proxy;
+  }
+}
+```
+
+3. mount过程中通过createVNode创建vnode
+```js
+// createVNode方法等于createVNodeWithArgsTransform
+const createVNode = createVNodeWithArgsTransform
+const vnode = createVNode(
+  rootComponent,
+  rootProps
+)
+const createVNodeWithArgsTransform = (...args) => {
+  return _createVNode(args)
+}
+// 创建虚拟dom
+function _createVNode(type, props = null, children = null, patchFlag = 0, dynamicProps = null, isBlockNode = false) {
+  /**
+   * shapeFlag用于表述虚拟节点的标志位
+   * 1 普通HTML元素
+   * 2 组件
+   * 4 文本
+   * 8 节点数组
+   * 64 suspensezujian
+   * 128 组件被激活
+  */
+  const shapeFlag = isString(type) ? 1 : isSuspense(type) ? 128 : isTeleport(type) ? 64 : isObject(type) ? 4 : isFunction(type) ? 2 : 0;
+  return createBaseVNode(
+    type,
+    props,
+    children,
+    patchFlag,
+    dynamicProps,
+    shapeFlag,
+    isBlockNode,
+    true
+  )
+}
+```
