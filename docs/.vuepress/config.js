@@ -107,6 +107,15 @@ module.exports = {
               path: '/original/vue/proxy/'
             },
             {
+              title: 'vue2',
+              children: [
+                {
+                  title: '源码',
+                  path: '/original/vue/vue2/origin/'
+                }
+              ]
+            },
+            {
               title: 'vuex',
               children: [
                 {
