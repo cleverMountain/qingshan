@@ -94,6 +94,10 @@ module.exports = {
             {
               title: '语音播报',
               path: '/article/video/'
+            },
+            {
+              title: '时间格式化',
+              path: '/article/formatDate/'
             }
           ]
         }
