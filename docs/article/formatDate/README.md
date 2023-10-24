@@ -34,22 +34,31 @@ const str = 'aaaa'.replace('a', (match, index, origin) => {
 
 
 3. 重写,不考虑正则表达式的情况
+- 字符串（String）是一种不可变（immutable）的数据类型，当声明字符串后不可以通过下标去更改
 ```js
-String.prototype.replace = function(target, cbOrStr) {
+let str = "Hello";
+str[0] = 'J'; // 这样的操作是无效的
+```
+- 重写
+```js
+String.prototype.replace = function (target, cbOrStr) {
   const isCb = Object.prototype.toString.call(cbOrStr) === '[object Function]'
-  const str = this
-  for(let i = 0; i < str.length; i++) {
-      if (str[i] === target && isCb) {
-        // 函数
-        str[i] = cbOrStr(target, i, str)
-        break
-      } else if (str[i] === target && !isCb) {
-        // 非函数
-        str[i] = cbOrStr
-        break
-      }
+  const str = this.toString()
+  let newStr = ''
+  let index = 1
+  for (let i = 0; i < str.length; i++) {
+    if (str[i] === target && isCb && index === 1) {
+      // 函数
+      newStr += cbOrStr(str[i], i, str)
+      index++
+    } else if (str[i] === target && !isCb && index === 1) {
+      // 非函数
+      str += cbOrStr
+      index++
+    } else {
+      newStr += str[i]
+    }
   }
-  // 返回值
-  return str
+  return newStr
 }
 ```
