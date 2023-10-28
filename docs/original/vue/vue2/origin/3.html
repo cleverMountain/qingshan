@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    let obj = {
+      a: 1,
+      b: {
+        c: 2
+      }
+    }
+    function defineReactive(obj) {
+      for (let key in obj) {
+        const value = obj[key]
+        if (typeof value == 'object' && value !== null) {
+          // 重新定义了b,b的地址未改变了,obj中的b也跟着改变了
+          defineReactive(value)
+        } else {
+          console.log(key)
+          Object.defineProperty(obj, key, {
+            get() {
+              return value
+            }
+          })
+        }
+      }
+    }
+    defineReactive(obj)
+    console.log(obj)
+  </script>
+</body>
+
+</html>

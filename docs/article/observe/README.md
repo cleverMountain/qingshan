@@ -55,3 +55,28 @@ function defineReactive(obj, key) {
   });
 }
 ```
+- 简单实现一个自己的defineReactive方法
+```js
+let obj = {
+  a: 1,
+  b: {
+    c: 2
+  }
+}
+function defineReactive(obj) {
+  for (let key in obj) {
+    const value = obj[key]
+    if (typeof value == 'object' && value !== null) {
+      // 重新定义了b,b的地址未改变了,obj中的b也跟着改变了
+      defineReactive(value)
+    } else {
+      Object.defineProperty(obj, key, {
+        get() {
+          return value
+        }
+      })
+    }
+  }
+}
+defineReactive(obj)
+```
