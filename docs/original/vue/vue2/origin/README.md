@@ -142,7 +142,55 @@ function proxy(target, sourceKey, key) {
 }
 ```
 
-6. 对data进行监听
+6. 对data进行监听,对象部分,不做依赖收集的
+- 监听数据时，通过new Observer实现
+- 当遇到没有被监听的对象时添加__ob__表示已监听过
+- 调用Observer原型的上wlak方法，遍历添加自己的属性
+- 调用defineReactive方法添加getter与setter
+- defineReactive方法中递归添加key，当是对象时，通过父级的get返回子级，子级也再进行observe
 ```js
+function Observer(value) {
+  this.value = value;
+  if (typeof value == 'object') {
+    // 添加__ob__属性
+    def(value, '__ob__', this);
+  }
+  if (typeof value == 'object') {
+    // 遍历
+    this.walk(value);
+  }
+}
+Observer.prototype.walk = function walk(obj) {
+  var keys = Object.keys(obj);
+  for (var i = 0; i < keys.length; i++) {
+    // 定义响应式
+    defineReactive$$1(obj, keys[i]);
+  }
+};
+function defineReactive$$1(obj,key) {
+  var property = Object.getOwnPropertyDescriptor(obj, key);
+  var getter = property && property.get;
+  var setter = property && property.set;
+  let val = obj[key]
+  // 递归监听
+  var childOb = observe(val);
+  Object.defineProperty(obj, key, {
+    enumerable: true,
+    configurable: true,
+    get: function reactiveGetter() {
+      // 形成父子级的关系
+      var value = getter ? getter.call(obj) : val
+      return value
+    },
+    set: function reactiveSetter(newVal) {}
+  })
+}
+function observe(value, asRootData) {
+  ob = new Observer(value);
+  if (asRootData && ob) {
+    ob.vmCount++;
+  }
+  return ob
+}
 observe(data, true)
 ```
