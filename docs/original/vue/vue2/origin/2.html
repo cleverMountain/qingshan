@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    let obj = {
+  
+      user: { a: 1 }
+    }
+    //   Object.defineProperty(obj, 'a', {
+    //     get(){
+    //       return 2
+    //     }
+    //   })
+    //   console.log(obj)
+    //  let a = Object.getOwnPropertyDescriptor(obj, 'a')
+    //  console.log(a.get())
+    function observer(value) {
+
+      this.value = value
+      if (typeof value == 'object') {
+
+        this.walk(value);
+      }
+    }
+    observer.prototype.walk = function (obj) {
+      var keys = Object.keys(obj);
+      for (var i = 0; i < keys.length; i++) {
+        defineReactive(obj, keys[i]);
+      }
+    }
+    function defineReactive(obj, key) {
+
+      var property = Object.getOwnPropertyDescriptor(obj, key);
+
+      var getter = property && property.get;
+
+      var setter = property && property.set;
+     let  val = obj[key];
+console.log(val)
+      var childOb = new observer(val);
+
+
+      Object.defineProperty(obj, key, {
+
+        enumerable: true,
+        configurable: true,
+        get: function reactiveGetter() {
+
+          var value = getter ? getter.call(obj) : val;
+
+
+          return value
+        },
+        set: function reactiveSetter(newVal) {
+
+
+        }
+      });
+    }
+    let a = new observer(obj)
+    console.log(a)
+  </script>
+</body>
+
+</html>

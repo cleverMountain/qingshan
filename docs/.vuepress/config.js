@@ -98,6 +98,10 @@ module.exports = {
             {
               title: '时间格式化',
               path: '/article/formatDate/'
+            },
+            {
+              title: 'vue2的数据劫持',
+              path: '/article/observe/'
             }
           ]
         }

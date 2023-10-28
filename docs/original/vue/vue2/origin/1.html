@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    const data = {
+      name: "我是若川",
+      obj: { a: 1 },
+      user: { a: 1, b: 2 }
+    }
+    function observe(value, asRootData) {
+      ob = new Observer(value);
+      if (asRootData && ob) {
+        ob.vmCount++;
+      }
+      return ob
+    }
+    function def(obj, key, val, enumerable) {
+      Object.defineProperty(obj, key, {
+        value: val,
+        enumerable: !!enumerable,
+        writable: true,
+        configurable: true
+      });
+    }
+    var Observer = function Observer(value) {
+      this.value = value;
+      // debugger
+      // // 收集依赖
+      // this.dep = new Dep();
+      // this.vmCount = 0;
+      // // 给valeu添加__ob__
+      // if (typeof value == 'object') {
+      //   def(value, '__ob__', this);
+      // }
+      if (typeof value == 'object') {
+        this.walk(value);
+      }
+      
+    };
+    Observer.prototype.walk = function walk(obj) {
+      var keys = Object.keys(obj);
+      for (var i = 0; i < keys.length; i++) {
+        defineReactive$$1(obj, keys[i]);
+      }
+    };
+    function defineReactive$$1(
+      obj,
+      key,
+      val,
+      customSetter,
+      shallow
+    ) {
+      // var dep = new Dep();
+
+      var property = Object.getOwnPropertyDescriptor(obj, key);
+      // cater for pre-defined getter/setters
+      // 用户自己定义了getter和setter
+      var getter = property && property.get;
+ 
+      var setter = property && property.set;
+      if ((!getter || setter) && arguments.length === 2) {
+        val = obj[key];
+      }
+      // 对对象递归
+      console.log(val)
+      // debugger
+      var childOb = observe(val);
+
+
+      Object.defineProperty(obj, key, {
+
+        enumerable: true,
+        configurable: true,
+        get: function reactiveGetter() {
+debugger
+          var value = getter ? getter.call(obj) : val;
+
+          // if (Dep.target) {
+          //   dep.depend();
+          //   if (childOb) {
+          //     childOb.dep.depend();
+          //     if (Array.isArray(value)) {
+          //       dependArray(value);
+          //     }
+          //   }
+          // }
+          return value
+        },
+        set: function reactiveSetter(newVal) {
+
+          // var value = getter ? getter.call(obj) : val;
+          // /* eslint-disable no-self-compare */
+          // if (newVal === value || (newVal !== newVal && value !== value)) {
+          //   return
+          // }
+          // /* eslint-enable no-self-compare */
+          // if (customSetter) {
+          //   customSetter();
+          // }
+          // // #7981: for accessor properties without setter
+          // if (getter && !setter) { return }
+          // if (setter) {
+          //   setter.call(obj, newVal);
+          // } else {
+          //   val = newVal;
+          // }
+          // childOb = !shallow && observe(newVal);
+
+          // dep.notify();
+        }
+      });
+    }
+    var uid = 0;
+
+    var Dep = function Dep() {
+      this.id = uid++;
+      this.subs = [];
+    };
+    observe(data);
+    console.log(data)
+  </script>
+</body>
+
+</html>
