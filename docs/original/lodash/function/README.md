@@ -1,6 +1,6 @@
 
 # 函数部分
-1. _.before(n, func)
+## 1. _.before(n, func)
 - 创建一个调用func的函数，通过this绑定和创建函数的参数调用func，调用次数不超过 n 次。 之后再调用这个函数，将返回一次最后调用func的结果。
 ```js
 function before(n, func) {
@@ -25,7 +25,7 @@ function before(n, func) {
 }
 ```
 
-2. _.after(n, func)
+## 2. _.after(n, func)
 ```js
 function after(n, func) {
   if (typeof func != 'function') {
@@ -40,7 +40,7 @@ function after(n, func) {
 }
 ```
 
-3. _.ary(func, [n=func.length])
+## 3. _.ary(func, [n=func.length])
 - func.length是参数的长度
 - 创建一个调用func的函数。调用func时最多接受 n个参数，忽略多出的参数。
 ```js
@@ -86,7 +86,7 @@ function ary(func, n) {
 }
 ```
 
-4. _.bindKey(object, key, [partials])
+## 4. _.bindKey(object, key, [partials])
 - 创建一个函数,在object[key]上通过接收partials附加参数，调用这个方法。
 ```js
 // 与ary类似
@@ -112,7 +112,7 @@ function bindKey() {
 ```
 
 
-5. _.curry(func, [arity=func.length])
+## 5. _.curry(func, [arity=func.length])
 - 柯里化
 ```js
 // 与_ary类似也是通过createWrap函数创建一个链条
@@ -149,7 +149,7 @@ function curry(func) {
 }
 ```
 
-6. _.memoize(func, [resolver])
+## 6. _.memoize(func, [resolver])
 - 函数记忆，保存函数的返回值，当遇到同一个缓存值时不再运行函数返回缓存的值
 ```js
 function memoize(func, resolver) {
@@ -185,7 +185,7 @@ function memoize(func) {
 ```
 
 
-7. _.once(func)
+## 7. _.once(func)
 - 创建一个只能调用 func 一次的函数。 重复调用返回第一次调用的结果
 ```js
 // 底层使用before实现的，当次数为2时
@@ -207,7 +207,7 @@ function before(func, n) {
 }
 ```
 
-8. _.debounce(func, [wait=0], [options=])
+## 8. _.debounce(func, [wait=0], [options=])
 - 防抖
 ```js
 // 简单实现
@@ -234,7 +234,7 @@ function debounce(func, wait, options) {
 }
 ```
 
-9. _.throttle(func, [wait=0], [options=])
+## 9. _.throttle(func, [wait=0], [options=])
 - 节流
 ```js
 // 简单节流

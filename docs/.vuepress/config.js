@@ -82,15 +82,15 @@ module.exports = {
         {
           title: '其他',
           children: [
-            {
-              title: '算法',
-              children: [
-                {
-                  title: '双指针类',
-                  path: '/article/other/math/two/'
-                }
-              ]
-            },
+            // {
+            //   title: '算法',
+            //   children: [
+            //     {
+            //       title: '双指针类',
+            //       path: '/article/other/math/two/'
+            //     }
+            //   ]
+            // },
             {
               title: '语音播报',
               path: '/article/video/'

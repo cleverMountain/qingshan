@@ -1,5 +1,5 @@
-1. 剖析vue2的数据劫持,vue2中对数组和对象的处理方法不同
-2. 对象的劫持部分 
+## 1. 剖析vue2的数据劫持,vue2中对数组和对象的处理方法不同，一下是分析过程
+## 2. 对象的劫持部分 
 - 源码中的observer方法,返回一个Observer实例
 ```js
 const obj = {
@@ -81,7 +81,7 @@ function defineReactive(obj) {
 defineReactive(obj)
 ```
 
-3. 数组的劫持
+## 3. 数组的劫持
 - 数组的劫持通过重写数组的push、pop、shift、unshift、splice、sort、reverse的方法，当调用以上方法时触发重写的方法
 ```js
 const arrayProto = Array.prototype;
@@ -127,13 +127,13 @@ bindProto(arr, arrayMethods)
 arr.push(4)
 ```
 
-4. vue2数据劫持的缺点
+## 4. vue2数据劫持的缺点
 - 数组，只有调用push、pop、shift、unshift、splice、sort、reverse方法时才会触发notify去更新视图
 - 通过下标修改数组时无法触发这些方法所以不会去更新视图
 - 对象，当监听对象时使用Object.defineProperty的setter,当对象增加或删除某个属性时无法监听改变，此外数据的深度太深时递归劫持时，可能会导致调用堆栈溢出
 
 
-5. vue2中当需要改变数组中的某个元素或者删除某个对象的属性时，通过$set与$delete
+## 5. vue2中当需要改变数组中的某个元素或者删除某个对象的属性时，通过$set与$delete
 - 数组时，都是调用重写的splice方法进行删除
 - 对象时，使用原始的delete，然后强制更新视图
 ```js

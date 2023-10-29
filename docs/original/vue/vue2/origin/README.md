@@ -1,4 +1,4 @@
-1. 从构造函数new Vue说起
+## 1. 从构造函数new Vue说起
 - new Vuw(options),选项式：将须向的参数通过对象的方式传入
 ```js
 // 传入el，data，created，methods
@@ -23,7 +23,7 @@ function initMixin(Vue) {
 // 在构造函数Vue的原型对象上添加——init方法
 initMixin(Vue);
 ```
-2. new调用时触发的_init方法,主要初始化了生命周期，方法，数据，状态等等
+##  2. new调用时触发的_init方法,主要初始化了生命周期，方法，数据，状态等等
 - initLifecycle(vm)初始化生命周期
 - initProxy(vm)初始化代理
 - initEvents(vm)初始化事件
@@ -61,7 +61,7 @@ Vue.prototype._init = function (options) {
 ``` 
 
 
-3. initState(vm)初始化状态
+## 3. initState(vm)初始化状态
 - 初始化prop
 - 初始化方法
 - 初始化data
@@ -90,7 +90,7 @@ function initState(vm) {
 }
 ```
 
-4. 初始化methods
+## 4. 初始化methods
 - 对方法的一种代理，在vm实例上绑定方法,this.method = vm.method = vm.$options.method
 ```js
 function initMethods(vm, methods) {
@@ -101,7 +101,7 @@ function initMethods(vm, methods) {
 ```
 
 
-5. 初始化data
+## 5. 初始化data
 - 判断data的类型，如果是函数则data.call(vm)，否则为data
 - 在vm上添加_data属性，用于代理this.key
 - 对data的所有key进行代理
@@ -142,7 +142,7 @@ function proxy(target, sourceKey, key) {
 }
 ```
 
-6. 对data进行监听,对象部分,不做依赖收集的
+## 6. 对data进行监听,对象部分,不做依赖收集的
 - 监听数据时，通过new Observer实现
 - 当遇到没有被监听的对象时添加__ob__表示已监听过
 - 调用Observer原型的上wlak方法，遍历添加自己的属性
@@ -197,7 +197,7 @@ observe(data, true)
 
 
 
-7. 数据劫持数组部分
+## 7. 数据劫持数组部分
 - 重新定义一个数组方法的对象
 - 重写push、pop、shift、unshift、splice、sort、reverse可以改变原数组的方法
 - 当数据调用以上方法时就走重写的方法
@@ -258,8 +258,8 @@ Observer.prototype.observeArray = function(items) {
 };
 ```
 
-
-8. 生命周期beforeCreate与created
+ 
+## 8. 生命周期beforeCreate与created
 - beforeCreate之前没有初始化data与方法，无法调用
 - created之后，已经created，可以调用data与methods
 ```js
@@ -293,5 +293,33 @@ function invokeWithErrorHandling(handler, context, args, vm, info) {
     handleError(e, vm, info);
   }
   return res
+}
+```
+
+## 9.模板挂载vm.$mount(vm.$options.el)
+- 初始化完成后，在生命周期created之后开始对模板进行挂载
+- 调用Vue原型对象上的$mount方法
+- 挂载模板时优先使用选项里面的template模板，如果没有则使用获取的el作为模板
+```js
+callHook(vm, 'created');
+vm.$mount(vm.$options.el)
+Vue.prototype.$mount = function(el) {
+  el = el && query(el);
+  var options = this.$options;
+  if (!options.render)   
+    var template = options.template;
+    // 模板挂载 如果有template就优先使用template
+    if (template) {
+      if (typeof template === 'string') {
+        template = idToTemplate(template);
+      } else if (template.nodeType) {
+        template = template.innerHTML;
+      } else {
+        return this
+      }
+    } else if (el) {
+      // 其次使用el，得到dom节点
+      template = getOuterHTML(el)
+    }  
 }
 ```
