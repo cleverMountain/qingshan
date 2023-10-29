@@ -127,7 +127,7 @@ bindProto(arr, arrayMethods)
 arr.push(4)
 ```
 
-4. vue2数据劫持的问题
+4. vue2数据劫持的缺点
 - 数组，只有调用push、pop、shift、unshift、splice、sort、reverse方法时才会触发notify去更新视图
 - 通过下标修改数组时无法触发这些方法所以不会去更新视图
 - 对象，当监听对象时使用Object.defineProperty的setter,当对象增加或删除某个属性时无法监听改变，此外数据的深度太深时递归劫持时，可能会导致调用堆栈溢出

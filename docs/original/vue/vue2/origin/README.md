@@ -257,3 +257,41 @@ Observer.prototype.observeArray = function(items) {
   }
 };
 ```
+
+
+8. 生命周期beforeCreate与created
+- beforeCreate之前没有初始化data与方法，无法调用
+- created之后，已经created，可以调用data与methods
+```js
+callHook(vm, 'beforeCreate');
+initInjections(vm); // resolve injections before data/props
+// 初始化状态
+initState(vm);
+initProvide(vm); // resolve provide after data/props
+callHook(vm, 'created')
+function callHook(vm, hook) {
+  // 获取生命周期函数，通过mergeOPtions后已经是数组
+  var handlers = vm.$options[hook];
+  var info = hook + " hook";
+    if (handlers) {
+      for (var i = 0, j = handlers.length; i < j; i++) {
+        // 调用每个声明周期的函数
+        invokeWithErrorHandling(handlers[i], vm, null, vm, info);
+      }
+    }
+}
+function invokeWithErrorHandling(handler, context, args, vm, info) {
+  var res;
+  try {
+    // 调用
+    res = args ? handler.apply(context, args) : handler.call(context);
+    if (res && !res._isVue && isPromise(res) && !res._handled) {
+      res.catch(function (e) { return handleError(e, vm, info + " (Promise/async)"); });
+      res._handled = true;
+    }
+  } catch (e) {
+    handleError(e, vm, info);
+  }
+  return res
+}
+```
