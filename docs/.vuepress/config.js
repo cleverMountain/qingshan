@@ -171,6 +171,10 @@ module.exports = {
               path: '/original/lodash/function/'
             }
           ]
+        },
+        {
+          title: 'Promise',
+          path: '/original/Promise/'
         }
       ]
     }
