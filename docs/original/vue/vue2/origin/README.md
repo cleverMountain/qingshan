@@ -194,3 +194,66 @@ function observe(value, asRootData) {
 }
 observe(data, true)
 ```
+
+
+
+7. 数据劫持数组部分
+- 重新定义一个数组方法的对象
+- 重写push、pop、shift、unshift、splice、sort、reverse可以改变原数组的方法
+- 当数据调用以上方法时就走重写的方法
+- 将原数组数据的原型链指向新的数组方法对象
+- 调用observeArray方法监听数组
+```js
+// 获取原数组方法的原型对象
+var arrayProto = Array.prototype;
+// 创建一个新对象，该新对象的原型对象指向arrayProto
+var arrayMethods = Object.create(arrayProto);
+var methodsToPatch = [
+  'push',
+  'pop',
+  'shift',
+  'unshift',
+  'splice',
+  'sort',
+  'reverse'
+];
+methodsToPatch.forEach(function (method) {
+  var original = arrayProto[method];
+  // 在arrayMethods定义push，pop等方法，重写数组方法
+  def(arrayMethods, method, function mutator() {
+    var args = [], len = arguments.length;
+    while (len--) args[len] = arguments[len];
+    var result = original.apply(this, args);
+    var ob = this.__ob__;
+    var inserted;
+    switch (method) {
+      case 'push':
+      case 'unshift':
+        inserted = args;
+        break
+      case 'splice':
+        inserted = args.slice(2);
+        break
+    }
+    if (inserted) { ob.observeArray(inserted) }
+    return result 
+});
+// 将数组数据的__ptoto__指向数组方法后的对象
+function protoAugment(target, src) {
+  target.__proto__ = src;
+}
+function Observer(value) {
+  this.value = value;
+  def(value, '__ob__', this);
+  if (Array.isArray(value)) {
+    protoAugment(value, arrayMethods);
+    // 监听数组数据
+    this.observeArray(value);
+  }
+}
+Observer.prototype.observeArray = function(items) {
+  for (var i = 0, l = items.length; i < l; i++) {
+    observe(items[i]);
+  }
+};
+```
