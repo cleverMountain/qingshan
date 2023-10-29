@@ -80,3 +80,54 @@ function defineReactive(obj) {
 }
 defineReactive(obj)
 ```
+
+3. 数组的劫持
+- 数组的劫持通过重写数组的push、pop、shift、unshift、splice、sort、reverse的方法，当调用以上方法时触发重写的方法
+```js
+const arrayProto = Array.prototype;
+// 创建一个新对象，该新对象的原型对象指向arrayProto
+const arrayMethods = Object.create(arrayProto);
+const methodsToPatch = [
+  'push',
+  'pop',
+  'shift',
+  'unshift',
+  'splice',
+  'sort',
+  'reverse'
+];
+methodsToPatch.forEach(function (method) 
+  const original = arrayProto[method];
+  console.log(method)
+  Object.defineProperty(arrayMethods, method, {
+    value: function () 
+      const args = [], len = arguments.length;
+      while (len--) args[len] = arguments[len];
+      const result = original.apply(this, args);
+      const ob = this.__ob__;
+      let inserted = null;
+      switch (method) {
+        case 'push':
+        case 'unshift':
+          inserted = args;
+          break
+        case 'splice':
+          inserted = args.slice(2);
+          break
+      }
+      // console.log(inserted)
+      return result
+    }
+  }
+})
+function bindProto(target, src) {
+  target.__proto__ = src
+}
+bindProto(arr, arrayMethods)
+arr.push(4)
+```
+
+4. vue2数据劫持的问题
+- 数组，只有调用push、pop、shift、unshift、splice、sort、reverse方法时才会触发notify去更新视图
+- 通过下标修改数组时无法触发这些方法所以不会去更新视图
+- 对象，当监听对象时使用Object.defineProperty的setter,当对象增加或删除某个属性时无法监听改变，此外数据的深度太深时递归劫持时，可能会导致调用堆栈溢出

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+
+</head>
+
+<body>
+  <script>
+    const arrayProto = Array.prototype;
+    // 创建一个新对象，该新对象的原型对象指向arrayProto
+    const arrayMethods = Object.create(arrayProto);
+    const methodsToPatch = [
+      'push',
+      'pop',
+      'shift',
+      'unshift',
+      'splice',
+      'sort',
+      'reverse'
+    ];
+    methodsToPatch.forEach(function (method) {
+
+      const original = arrayProto[method];
+      console.log(method)
+      Object.defineProperty(arrayMethods, method, {
+        value: function () {
+
+          const args = [], len = arguments.length;
+          while (len--) args[len] = arguments[len];
+          const result = original.apply(this, args);
+          const ob = this.__ob__;
+          let inserted = null;
+          switch (method) {
+            case 'push':
+            case 'unshift':
+              inserted = args;
+              break
+            case 'splice':
+              inserted = args.slice(2);
+              break
+          }
+          // console.log(inserted)
+          return result
+        }
+      })
+
+    })
+    function bindProto(target, src) {
+      target.__proto__ = src
+    }
+    const arr = [1, 2, 3]
+    bindProto(arr, arrayMethods)
+    console.log(arrayMethods)
+    console.log(arr)
+   let  b =  arr.push(4)
+   console.log(b)
+  </script>
+</body>
+
+</html>
