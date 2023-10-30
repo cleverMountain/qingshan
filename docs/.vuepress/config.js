@@ -32,37 +32,32 @@ module.exports = {
     sidebar: {
       '/base/': [
         {
-          title: 'js相关',
-          children: [
-            {
-              title: "Array",
-              path: '/base/jsBasic/array/'
-            },
-            {
-              title: "Object",
-              path: '/base/jsBasic/object/'
-            },
-            {
-              title: "String",
-              path: '/base/jsBasic/string/'
-            },
-            {
-              title: "集合",
-              path: '/base/jsBasic/mapping/'
-            },
-            {
-              title: "函数",
-              path: '/base/jsBasic/function/'
-            },
-            {
-              title: '迭代器、生成器及可迭代对象',
-              path: '/base/jsBasic/generate/'
-            },
-            {
-              title: 'Promise',
-              path: '/base/jsBasic/promise/'
-            }
-          ]
+          title: "Array",
+          path: '/base/array/'
+        },
+        {
+          title: "Object",
+          path: '/base/object/'
+        },
+        {
+          title: "String",
+          path: '/base/string/'
+        },
+        {
+          title: "集合",
+          path: '/base/mapping/'
+        },
+        {
+          title: "函数",
+          path: '/base/function/'
+        },
+        {
+          title: '迭代器、生成器及可迭代对象',
+          path: '/base/generate/'
+        },
+        {
+          title: 'Promise',
+          path: '/base/promise/'
         },
         {
           title: "CSS",
@@ -71,8 +66,17 @@ module.exports = {
       ],
       '/article/': [
         {
-          title: 'js的结构与算法',
-          path: '/article/js/'
+          title: 'js的数据结构与算法',
+          children: [
+            {
+              title: '数据结构',
+              path: '/article/js/dataStructures/'
+            },
+            {
+              title: '算法',
+              path: '/article/js/algorithms/'
+            }
+          ]
         },
         {
           title: 'jsonp',
