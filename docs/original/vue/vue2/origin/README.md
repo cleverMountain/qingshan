@@ -323,3 +323,259 @@ Vue.prototype.$mount = function(el) {
     }  
 }
 ```
+
+## 10.compileToFunction(template)将template模板编译成render函数
+- 分为三步，将template变成ast语法树
+- 将ast语法树变成语法树字符串
+- 将语法树字符串变成render函数
+```js
+function compileToFunction(template) {
+  // console.log(template)
+  // 创建ast语法树
+  const ast = parseHTML(template)
+  // 把语法树变成字符串
+  const code = generate(ast)
+  // console.log(code)
+  // // 将字符串变成render函数,模板引擎with + new Function() {}
+  const render = new Function(`with(this){return ${code}}`)
+  // console.log(render)
+  return render
+}
+```
+
+## 11. parseHTML(template)获取ast语法树
+- 解析template时，通过匹配开始标签，结束标签，文本来对模板进行解析
+- 当遇到开始标签时，通过parseStartTag方法解析开始标签
+- 遇到结束标签时，使用advance方法直接跳过
+- 遇到文本时通过chars处理文本
+- 通过stack栈结构来确定标签的父子关系
+```js
+const ncname = `[a-zA-Z_][\\-\\.0-9_a-zA-Z]*`;   // 小a-z 大A到Z 标签名称： div  span a-aa
+//?: 匹配不捕获
+const qnameCapture = `((?:${ncname}\\:)?${ncname})`; // 捕获这种 <my:xx> </my:xx>
+const startTagOpen = new RegExp(`^<${qnameCapture}`); // 标签开头的正则 捕获的内容是标签名
+const endTag = new RegExp(`^<\\/${qnameCapture}[^>]*>`); // 匹配标签结尾的 </div>
+const attribute = /^\s*([^\s"'<>\/=]+)(?:\s*(=)\s*(?:"([^"]*)"+|'([^']*)'+|([^\s"'=<>`]+)))?/; // 匹配属性的
+//属性匹配   <div id="atts"></div>  // aa = "aa" | aa = 'aa'
+const startTagClose = /^\s*(\/?)>/; // 匹配标签结束的  <div></div>  <br/>
+const defaultTagRE = /\{\{((?:.|\r?\n)+?)\}\}/g // {{xx}}  默认的 双大括号
+//vue3 一摸一样的
+function createASTELement(tagName, attrs) {
+    return {
+        tag: tagName, //标签名称
+        type: 1, //元素类型
+        children: [],// 孩子列表
+        attrs,   //属性集合
+        parent: null  // 父元素
+    }
+}
+let root,
+    currentParent,
+    stack = []
+function start(tagName, attrs) {
+    let element = createASTELement(tagName, attrs)
+    if (!root) {
+        root = element
+    }
+    currentParent = element
+    stack.push(element)
+}
+function end() {
+    // 从栈中取出一个
+    const element = stack.pop()
+    currentParent = stack[stack.length - 1]
+    if (currentParent) {
+        element.parent = currentParent
+        currentParent.children.push(element)
+    }
+}
+function chars(text) {
+    // console.log(text)
+    text = text.replace(/\s/g, '')
+    if (text) {
+        currentParent.children.push({
+            type: 3, //元素类型
+            text,// 孩子列表
+        })
+    }
+}
+
+
+export function parseHTML(html) {
+    //1解析标签  <div id="my">hello {{name}} <span>world</span></div>
+    while (html) { // 只要html 不为空字符串就一直执行下去
+        let textEnd = html.indexOf('<');
+        if (textEnd === 0) {
+
+            const startTagMatch = parseStartTag() //开始标签匹配结果
+            if (startTagMatch) {
+                start(startTagMatch.tagName, startTagMatch.attrs)
+
+                continue; //中断（循环中）的一个迭代，如果发生指定的条件。然后继续循环中的下一个迭代。
+            }
+
+            const endTagMatch = html.match(endTag)
+            if (endTagMatch) {
+                end()
+                advance(endTagMatch[0].length)
+                continue
+            }
+            // console.log(html)
+        }
+        //文本 
+        let text;
+        if (textEnd > 0) {
+            // console.log(textEnd)
+            text = html.substring(0, textEnd)
+            if (text) {//处理文本
+                chars(text)
+                advance(text.length)
+
+            }
+
+        }
+    }
+    //删除标签
+    function advance(n) { //将字符串进行截取操作，再跟新到html
+        html = html.substring(n)
+
+    }
+
+    function parseStartTag() {
+        const start = html.match(startTagOpen)
+        if (start) {
+            const match = {
+                tagName: start[1],
+                attrs: []
+            }
+            advance(start[0].length)
+            /**
+             *  复杂写法
+             *  let end = html.match(startTagClose),
+             *  attr = attr = html.match(attribute)
+             *  // 匹配到attr但是没有匹配到闭合标签,循环匹配attr并将其push进attrs
+             *  while(!end && attr) {
+             *     console.log(attr)
+             *     match.attrs.push({name: attr[1], value: attr[3] || attr[4] || attr[5] })
+             *     advance(attr[0].length)
+             *     end = html.match(startTagClose)
+             *     attr = attr = html.match(attribute)
+             *  }
+             */
+            let end,
+                attr
+            // 匹配到attr但是没有匹配到闭合标签,循环匹配attr并将其push进attrs
+            while (!(end = html.match(startTagClose)) && (attr = html.match(attribute))) {
+                match.attrs.push({ name: attr[1], value: attr[3] || attr[4] || attr[5] })
+                advance(attr[0].length)
+            }
+            // 匹配到闭合标签结束处理
+            if (end) {
+                advance(end[0].length)
+                return match
+            }
+        }
+    }
+    // console.log(root)
+    return root
+}
+```
+
+
+
+
+## 12. generate(ast)将ast语法树变成对应字符串
+- 通过ast获取对应字符串，包含_c(处理标签),_v(处理文本),_s(处理变量)
+```js
+//思路
+//  <div id="app" style="color:red"> hello {{name}}<p>hello1</P> </div>
+//变成 render()
+// render(){
+//      return _c("div",{id:"app",style:{color:"res"}},_v('hello'+_s(name)),_c('p'，null,_v('hello1)))
+//    }
+const defaultTagRE = /\{\{((?:.|\r?\n)+?)\}\}/g; //注意正则匹配 lastIndex
+
+// attrs
+function genProps(attrs) {
+    //处理属性
+    let str = ''
+    for (let i = 0; i < attrs.length; i++) {
+        let attr = attrs[i]
+        //注意;   style："color:red;font-size: 20px
+        if (attr.name === 'style') {
+            let obj = {} //对样式进行特殊处理
+            attr.value.split(';').forEach(item => {
+                let [key, value] = item.split(':')
+                obj[key] = value
+            })
+            attr.value = obj //
+        }
+        //其他  'id:app',注意最后会多个属性化 逗号
+        str += `${attr.name}:${JSON.stringify(attr.value)},`
+    }
+    return `{${str.slice(0, -1)}}`  // -1为最后一个字符串的位置  演示一下 
+    // let reg =/a/g    reg.test('ad') false  
+}
+
+function genChildren(children) {
+    if (children) {
+        let res = children.map(child => gen(child))
+        return res.join(',')
+    }
+}
+function gen(node) { //获取到的元素
+    //注意 是什么类型  文本   div
+    if (node.type === 1) {
+        return generate(node) //生成元素节点的字符串
+    } else {
+        let text = node.text // 获取文本  注意  普通的文本  hello{{name}}?{{num}}
+        if (!defaultTagRE.test(text)) {
+            return `_v(${JSON.stringify(text)})`  // _v(html)  _v('hello'+_s(name))
+        }
+        let tokens = [] //存放每一段的代码
+        let lastIndex = defaultTagRE.lastIndex = 0;//如果正则是全局模式 需要每次使用前变为0
+        let match;// 每次匹配到的结果  exec 获取 {{name}}
+        while (match = defaultTagRE.exec(text)) {
+            // console.log(match) 获取到 又{{}}  元素
+            //  console.log(match)
+            let index = match.index;// 保存匹配到的索引
+            // hello{{name}} ? {{num}}
+            if (index > lastIndex) {
+                tokens.push(JSON.stringify(text.slice(lastIndex, index))) //添加的是文本
+                //    console.log(tokens)
+            }
+            //{{name}} 添加{{}} aa
+            tokens.push(`_s(${match[1].trim()})`)
+            lastIndex = index + match[0].length //最后 {{}} 索引位置
+        }
+        if (lastIndex < text.length) {
+            tokens.push(JSON.stringify(text.slice(lastIndex)))
+        }
+        //最终返回出去
+
+        return `_v(${tokens.join("+")})`
+    }
+
+
+}
+//语法层面的转移
+export function generate(el) {
+
+    //方法 拼接字符串  源码也是这样操作 [{}]    ${el.attrs.length?`{style:{color:red}}`:'undefined'}
+    let code = `_c('${el.tag}', ${el.attrs ? genProps(el.attrs) : null}, ${el.children ? genChildren(el.children) : null})`
+    /**
+     *   root         prop         child                                        child          
+     * _c('div', {id: 'app'},_c('div', null, _v(_s(name)+ "jello" + _s(age)), _c('div'))
+     * 
+     */
+    return code
+}
+```
+
+
+## 13. 得到render函数
+```js
+const render = new Function(`with(this){return ${code}}`)
+// console.log(render)
+return render
+```
