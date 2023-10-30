@@ -1,6 +1,2 @@
-# 目录
-
-> 博文包含 JavaScript、Vue、React、ReactNative、小程序、Node 等技术类文章。
-
-- [js基础知识](/base/jsBasic/)
+数据结构：数据结构是一种组织和存储数据的方式，以便于使用者更好的访问和操作数据
 
