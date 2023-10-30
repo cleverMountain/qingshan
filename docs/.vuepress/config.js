@@ -71,39 +71,24 @@ module.exports = {
       ],
       '/article/': [
         {
-          title: '网络',
-          children: [
-            {
-              title: 'jsonp',
-              path: '/article/network/jsonp/'
-            },
-          ]
+          title: 'jsonp',
+          path: '/article/jsonp/'
         },
         {
-          title: '其他',
-          children: [
-            // {
-            //   title: '算法',
-            //   children: [
-            //     {
-            //       title: '双指针类',
-            //       path: '/article/other/math/two/'
-            //     }
-            //   ]
-            // },
-            {
-              title: '语音播报',
-              path: '/article/video/'
-            },
-            {
-              title: '时间格式化',
-              path: '/article/formatDate/'
-            },
-            {
-              title: 'vue2的数据劫持',
-              path: '/article/observe/'
-            }
-          ]
+          title: '语音播报',
+          path: '/article/video/'
+        },
+        {
+          title: '时间格式化',
+          path: '/article/formatDate/'
+        },
+        {
+          title: 'vue2的数据劫持',
+          path: '/article/observe/'
+        },
+        {
+          title: '瀑布流',
+          path: '/article/waterfallFlow/'
         }
       ],
       '/original/': [
