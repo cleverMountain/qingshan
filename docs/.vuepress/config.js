@@ -71,6 +71,10 @@ module.exports = {
       ],
       '/article/': [
         {
+          title: 'js的结构与算法',
+          path: '/article/js/'
+        },
+        {
           title: 'jsonp',
           path: '/article/jsonp/'
         },
