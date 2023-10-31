@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    class Stack {
+      constructor() {
+        // 使用数组来模拟栈结构
+
+        this.stack = [...arguments]
+        // 置空原型链
+        this.stack.__proto__ = null 
+        // return this.stack
+      }
+      // 压栈
+      push(element) {
+        const length = this.stack.length
+        this.stack[length] = element
+      }
+      // 删除栈顶元素，返回被删除的元素
+      pop() {
+        const length = this.stack.length
+        let res = this.stack[length - 1]
+        this.stack.length = length - 1
+        return res
+      }
+      // 返回栈顶元素，不对栈作修改
+      peek() {
+        const length = this.stack.length
+        return this.stack[length -1]
+      }
+      // 栈是否为空
+      isEmpty() {
+        return this.stack.length > 0 ? false : true
+      }
+      // 栈的个数
+      size() {
+        return this.stack.length
+      }
+      // 将栈的所有内容义字符串返回
+      toString() {
+        let str = ''
+        const length = this.stack.length
+        for(let i = 0; i < length; i++) {
+          str += this.stack[i]
+        }
+        return str
+      }
+    }
+
+    const stack = new Stack(1, 2)
+    console.log(stack)
+    stack.push(3)
+    console.log(stack.peek())
+    console.log(stack.isEmpty())
+    console.log(stack.size())
+    console.log(stack.toString())
+    console.log(stack.pop())
+    console.log(stack)
+  </script>
+</body>
+</html>
