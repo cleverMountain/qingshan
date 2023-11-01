@@ -70,7 +70,12 @@ module.exports = {
           children: [
             {
               title: '数据结构',
-              path: '/article/js/dataStructures/'
+              children: [
+                {
+                  title: '栈',
+                  path: '/article/js/dataStructures/stack/'
+                }
+              ]
             },
             {
               title: '算法',

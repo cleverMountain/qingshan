@@ -53,15 +53,26 @@
       }
     }
 
-    const stack = new Stack(1, 2)
-    console.log(stack)
-    stack.push(3)
-    console.log(stack.peek())
-    console.log(stack.isEmpty())
-    console.log(stack.size())
-    console.log(stack.toString())
-    console.log(stack.pop())
-    console.log(stack)
+    // const stack = new Stack(1, 2)
+    // console.log(stack)
+    // stack.push(3)
+    // console.log(stack.peek())
+    // console.log(stack.isEmpty())
+    // console.log(stack.size())
+    // console.log(stack.toString())
+    // console.log(stack.pop())
+    // console.log(stack)
+    str = ''
+    function change(number) {
+      const el = number % 2
+     
+      const res = Math.floor(number / 2)
+      console.log(res)
+      if (res) {
+        change(res)
+      }
+    }
+    change(100)
   </script>
 </body>
 </html>
