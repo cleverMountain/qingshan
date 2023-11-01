@@ -74,6 +74,10 @@ module.exports = {
                 {
                   title: '栈',
                   path: '/article/js/dataStructures/stack/'
+                },
+                {
+                  title: '队列',
+                  path: '/article/js/dataStructures/queue/'
                 }
               ]
             },
