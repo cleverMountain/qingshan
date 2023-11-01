@@ -1,4 +1,4 @@
-数据结构：数据结构是一种组织和存储数据的方式，以便于使用者更好的访问和操作数据
+
 
 
 
@@ -64,19 +64,20 @@ class Stack {
 }
 ```
 
-## 2.栈结构的应用
+## 2.栈结构的应用: 10进制转2进制
 - 将10进制转化为2进制
 ```js
 function decToBin(number) {
   const stack = new Stack()
-  function change(number) {
-    const el = number % 2
-    const res = Math.floor(number / 2)
-    stack.push(el)
-    if (res) {
-      change(res)
-    }
+  while (number > 0) {
+    stack.push(number % 2)
+    number = Math.floor(number / 2)  
   }
   return stack.stringSort()
 }
 ```
+
+
+## 3.栈结构的应用: 中缀表达式转后缀表达式
+
+## 4.栈结构的应用: 深度优先搜索

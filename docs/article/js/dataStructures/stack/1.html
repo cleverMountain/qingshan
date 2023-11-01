@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
 </head>
+
 <body>
   <script>
     class Stack {
@@ -14,7 +16,7 @@
 
         this.stack = [...arguments]
         // 置空原型链
-        this.stack.__proto__ = null 
+        this.stack.__proto__ = null
         // return this.stack
       }
       // 压栈
@@ -32,7 +34,7 @@
       // 返回栈顶元素，不对栈作修改
       peek() {
         const length = this.stack.length
-        return this.stack[length -1]
+        return this.stack[length - 1]
       }
       // 栈是否为空
       isEmpty() {
@@ -46,7 +48,7 @@
       toString() {
         let str = ''
         const length = this.stack.length
-        for(let i = 0; i < length; i++) {
+        for (let i = 0; i < length; i++) {
           str += this.stack[i]
         }
         return str
@@ -64,15 +66,15 @@
     // console.log(stack)
     str = ''
     function change(number) {
-      const el = number % 2
-     
-      const res = Math.floor(number / 2)
-      console.log(res)
-      if (res) {
-        change(res)
+      const stack = new Stack()
+      while (number > 0) {
+        stack.push(number % 2)
+        number = Math.floor(number / 2)  
       }
+      console.log(stack)
     }
     change(100)
   </script>
 </body>
+
 </html>
