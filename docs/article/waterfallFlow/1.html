@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <style>
+    .container {
+      width: 1200px;
+      position: relative;
+    }
+    .item {
+      width: 200px;
+      position: absolute;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <img class="item" src="./6.jpg" alt="">
+    <img class="item" src="./7.jpg" alt="">
+    <img class="item" src="./18.jpg" alt="">
+    <img class="item" src="./19.jpg" alt="">
+    <img class="item" src="./8.jpg" alt="">
+    <img class="item" src="./1.jpg" alt="">
+    <img class="item" src="./2.jpg" alt="">
+    <img class="item" src="./3.jpg" alt="">
+    <img class="item" src="./4.jpg" alt="">
+    <img class="item" src="./5.jpg" alt="">
+    <img class="item" src="./8.jpg" alt="">
+    <img class="item" src="./9.jpg" alt="">
+    <img class="item" src="./10.jpg" alt="">
+    <img class="item" src="./11.jpg" alt="">
+    <img class="item" src="./12.jpg" alt="">
+    <img class="item" src="./13.jpg" alt="">
+    <img class="item" src="./14.jpg" alt="">
+    <img class="item" src="./15.jpg" alt="">
+    <img class="item" src="./16.jpg" alt="">
+    <img class="item" src="./17.jpg" alt="">
+    <img class="item" src="./20jpg" alt="">
+  </div>
+  <script>
+    ((document) => {
+  const items = document.getElementsByClassName('item')
+  const length = items.length
+  const _arr = [] // item高度
+  function init() {
+    for (let i = 0; i < length; i++) {
+      const item = items[i]
+      const width = (1200 - 40) / 5
+      item.style.width = width + 'px'
+      if (i < 5) {
+        const height = item.offsetHeight
+        _arr.push(height)
+        item.style.top = 0
+        item.style.left = (i * width + 10) + 'px'
+      } else {
+        const minIndex = getMinIndex(_arr)
+        item.style.top = (_arr[minIndex] + 10) + 'px'
+        item.style.left = items[minIndex].offsetLeft + 'px'
+        _arr[minIndex] += (item.offsetHeight + 10)
+      }
+    }
+  }
+  function getMinIndex(arr) {
+   return arr.indexOf(Math.min(...arr))
+  }
+  window.onload = function () {
+    init()
+  }
+})(document);
+  </script>
+</body>
+
+</html>

@@ -97,3 +97,62 @@
 
 
 
+4. 插件形式
+```js
+// @ts-nocheck
+(function () {
+  function getMinIndex(arr) {
+    console.log(arr)
+    return arr.indexOf(Math.min(...arr))
+  }
+  class WtaterFlow {
+    constructor(optiopns) {
+      const { column, gap, el } = optiopns
+      this.column = column
+      this.gap = gap
+      this.container = document.getElementsByClassName(el)[0]
+      this.imgs = []
+      this._arr = []
+      this.items = []
+
+    }
+    renderImg() {
+      this.imgs.forEach((img, i) => {
+        const oItem = document.createElement('img'),
+          width = (this.container.offsetWidth - (this.column - 1) * this.gap) / this.column,
+          height = (img.height * width) / img.width
+        oItem.className = 'item'
+        console.log(height)
+        // const img = new Image()
+        oItem.src = img.src
+        oItem.style.width = width + 'px'
+        oItem.style.height = height + 'px'
+     
+        if (i < this.column) {
+          this._arr.push(oItem.offsetHeight)
+          console.log(oItem.offsetHeight)
+         
+          oItem.style.top = 0
+          oItem.style.left = (i * width + this.gap) + 'px'
+        } else {
+          const minIndex = getMinIndex(this._arr)
+          console.log(this._arr)
+          oItem.style.top = (this._arr[minIndex] + this.gap) + 'px'
+          oItem.style.left = this.items[minIndex].offsetLeft + 'px'
+          this._arr[minIndex] += (oItem.offsetHeight + this.gap)
+        }
+        this.items.push(oItem)
+        this.container.appendChild(oItem)
+      })
+
+    }
+    addImg(imgs) {
+      this.imgs.push(...imgs)
+      this.renderImg()
+    }
+  }
+  window.WtaterFlow = WtaterFlow
+})()
+```
+
+
