@@ -97,12 +97,14 @@
 
 
 
-4. 插件形式
+## 3. 插件形式封装
+1. 插件部分
+- 插件部分，立即执行自执行，在window上挂载构造函数
+- 配置部分，column一行多少张图片， gap间隔，el外部容器
+- renderImg进行渲染
 ```js
-// @ts-nocheck
 (function () {
   function getMinIndex(arr) {
-    console.log(arr)
     return arr.indexOf(Math.min(...arr))
   }
   class WtaterFlow {
@@ -114,45 +116,78 @@
       this.imgs = []
       this._arr = []
       this.items = []
+      this.i = 0
 
     }
-    renderImg() {
-      this.imgs.forEach((img, i) => {
+    renderImg(imgs) {
+      imgs.forEach((img, i) => {
         const oItem = document.createElement('img'),
           width = (this.container.offsetWidth - (this.column - 1) * this.gap) / this.column,
           height = (img.height * width) / img.width
         oItem.className = 'item'
-        console.log(height)
+
         // const img = new Image()
         oItem.src = img.src
         oItem.style.width = width + 'px'
         oItem.style.height = height + 'px'
-     
-        if (i < this.column) {
+        this.items.push(oItem)
+        this.container.appendChild(oItem)
+        if (this.i < this.column) {
           this._arr.push(oItem.offsetHeight)
           console.log(oItem.offsetHeight)
-         
+
           oItem.style.top = 0
-          oItem.style.left = (i * width + this.gap) + 'px'
+          if (this.i == 0) {
+            oItem.style.left =0
+          } else {
+            oItem.style.left = (this.i * width + this.gap) + 'px'
+          }
+         
         } else {
           const minIndex = getMinIndex(this._arr)
-          console.log(this._arr)
+          // console.log(minIndex)
           oItem.style.top = (this._arr[minIndex] + this.gap) + 'px'
           oItem.style.left = this.items[minIndex].offsetLeft + 'px'
           this._arr[minIndex] += (oItem.offsetHeight + this.gap)
         }
-        this.items.push(oItem)
-        this.container.appendChild(oItem)
+        this.i++
       })
-
+      console.log(this._arr)
     }
     addImg(imgs) {
-      this.imgs.push(...imgs)
-      this.renderImg()
+      // this.imgs.push(...imgs)
+      this.renderImg(imgs)
     }
   }
   window.WtaterFlow = WtaterFlow
 })()
 ```
 
+2. 使用
+```js
+const waterFlow = new WtaterFlow({
+  column: 2,
+  gap: 10,
+  el: 'container'
+}
+// 接口返回
+function fetch(num) {
+  getImg(num).then(res => {
+    waterFlow.addImg(res)
+    console.log(waterFlow)
+  })
+}
+fetch(0)
+window.onscroll = function () {
+  // 当页面滚动到底部时触发加载更多内容的函数
+  if (document.documentElement.scrollHeight - window.innerHeight === window.scrollY) {
+    loadMoreContent();
+  }
+}
+function loadMoreContent() {
+  console.log('触底，加载更多内容');
+  fetch(1)
+}
+
+```
 
