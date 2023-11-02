@@ -11,8 +11,7 @@
 <body>
   <script>
     function Queue() {
-      this.queue = []
-      this.queue.__proto__ = null
+      this.queue = [].concat(...arguments)
     }
     // 向队列尾部添加一个( 或多个 )新的项
     Queue.prototype.enqueue = function () {
@@ -23,9 +22,12 @@
     }
     // 移除队列的第一( 即排在队列最前面的 )项，并返回被移除的元素。
     Queue.prototype.dequeue = function () {
-      const length = this.queue.length
-      let res = this.queue[length - 1]
-      this.queue.length = length - 1
+      for (let i = 0; i < this.queue.length - 1; i++) {
+        this.queue[i] = this.queue[i + 1]
+      }
+
+      let res = this.queue[0]
+      this.queue.length--
       return res
     }
     // 返回队列中第一个元素, 队列不做任何变动
@@ -50,10 +52,45 @@
       }
       return str
     }
-    const que = new Queue()
-    que.enqueue(1, 2, 3)
-    console.log(que.dequeue())
-    console.log(que)
+    // const que = new Queue()
+    // que.enqueue(1, 2, 3)
+    // console.log(que.dequeue())
+    // console.log(que)
+    const arr = ['a', 'b', 'c', 'd', 'e']
+
+
+    function get(arr, num) {
+      const newArr = Array.from(arr)
+      for (let i = 0; i < arr.length; i++) {
+        arr[i] = {
+          name: arr[i],
+          index: i + 1
+        }
+        newArr.push()
+      }
+      const queue = new Queue(arr)
+      while (queue.size() > 1) {
+        const que = queue.queue
+        if (que[0].index % 7 != 0) {
+          let res = queue.dequeue()
+          res.index = que.length + que[0].index
+          queue.enqueue(res)
+        } else {
+          queue.dequeue()
+        }
+      }
+      const res = queue.front()
+      res.index = newArr.findIndex(item => item == res.name)
+      console.log(res)
+      return res
+    }
+    get(arr, 7)
+    // let arr1 = [1, 2, 3]
+    // for (let i = 0; i < arr1.length - 1; i++) {
+    //   arr1[i] = arr1[i + 1]; // 将后面的元素往前移动一个位置
+    // }
+    // arr1.length--
+    // console.log(arr1)
   </script>
 </body>
 
