@@ -12,8 +12,7 @@
 - 基于数组
 ```js
 function Queue() {
-  this.queue = []
-  this.queue.__proto__ = null
+  this.queue = [].concat(...arguments)
 }
 // 向队列尾部添加一个( 或多个 )新的项
 Queue.prototype.enqueue = function () {
@@ -24,9 +23,11 @@ Queue.prototype.enqueue = function () {
 }
 // 移除队列的第一( 即排在队列最前面的 )项，并返回被移除的元素。
 Queue.prototype.dequeue = function () {
-  const length = this.queue.length
-  let res = this.queue[length - 1]
-  this.queue.length = length - 1
+  for (let i = 0; i < this.queue.length - 1; i++) {
+    this.queue[i] = this.queue[i + 1]
+  } 
+  let res = this.queue[0]
+  this.queue.length--
   return res
 }
 // 返回队列中第一个元素, 队列不做任何变动
@@ -51,4 +52,37 @@ Queue.prototype.toString = function () {
   }
   return str
 }
+```
+
+
+## 2.队列应用：击鼓传花
+
+```js
+const arr = ['a', 'b', 'c', 'd', 'e']
+function getTarget(arr, num) {
+  const newArr = Array.from(arr)
+  for (let i = 0; i < arr.length; i++) {
+    arr[i] = {
+      name: arr[i],
+      index: i + 1
+    }
+    newArr.push()
+  }
+  const queue = new Queue(arr)
+  while (queue.size() > 1) {
+    const que = queue.queue
+    if (que[0].index % 7 != 0) {
+      let res = queue.dequeue()
+      res.index = que.length + que[0].index
+      queue.enqueue(res)
+    } else {
+      queue.dequeue()
+    }
+  }
+  const res = queue.front()
+  res.index = newArr.findIndex(item => item == res.name)
+  console.log(res)
+  return res
+}
+getTarget(arr, 7)
 ```
