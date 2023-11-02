@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    const obj = { 
+      a: {
+        b: 1
+      },
+      c: 1
+     };
+    const handler1 = {
+      set(target, property, value, receiver) {
+        target[property] = value
+        console.log('set')
+        return true
+
+      },
+      get(target, property, receiver) {
+        console.log(target[property])
+        return target[property]
+      }
+    };
+  for(let key in obj) {
+    
+  }
+    // const proxy1 = new Proxy(obj, handler1);
+    // proxy1.a.b = 3
+    // proxy1.c = 2
+    // console.log(proxy1)
+    // console.log(obj)
+
+    // proxy1.eyeCount = 1;
+    // // Expected output: "Monsters must have an even number of eyes"
+
+    // console.log(proxy1.eyeCount);
+    // // Expected output: 4
+
+    // proxy1.eyeCount = 2;
+    // console.log(proxy1.eyeCount);
+// Expected output: 2
+
+  </script>
+</body>
+
+</html>

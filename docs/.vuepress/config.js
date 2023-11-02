@@ -106,6 +106,10 @@ module.exports = {
         {
           title: '瀑布流',
           path: '/article/waterfallFlow/'
+        },
+        {
+          title: '自定义微信小程序watch',
+          path: '/article/watch/'
         }
       ],
       '/original/': [
