@@ -1,6 +1,6 @@
 1.最近在使用微信小程序时发现没有提供watch属性，便想着自己实现一个watch监听属性，仿照着vue2的watch国车过还算简单，下面是实现过程。
 
-## 1.自定义微信小程序中的watch
+## 1.自定义微信小程序中的watch(Object.defineProperty)
 1. html部分
 ```html
 <!DOCTYPE html>
@@ -101,4 +101,72 @@ function defineReactive(data, key, handler, deep, options) {
 }
 setWatcher(page)
 
+```
+
+
+
+## 2.使用proxy进行代理
+- 1. 通过Refelect的set和get
+- 2. 遇到深度对象时需递归代理 
+- 3. 在set时，数组和对象的过程不同，但是数组的length与下标也是对象的属性，当使用push,pop,shift，onshift时数组下标与
+     length均会改变，所以会两次触发set，此时过滤一次length即可
+- 4. 在收集watche的回调函数时，根据不同的watcher写法收集
+
+```js
+function setWatcher(options) {
+  let { data, watch } = options
+  options.data = defineReactive(data, watch, options)
+}
+function defineReactive(data, watch, options) {
+  // watch的回调函数
+  const cbs = {}
+  for (let key in watch) {
+    const fn = watch[key]
+    if (typeof fn == 'function') {
+      cbs[key] = fn
+    } else {
+      cbs[key] = fn.handler
+    }
+  }
+  let key = ''
+  const handler = {
+    set(target, property, value, receiver) {
+      // 保存老值，避免被修改
+      let oldValueObj = target[property]
+      let oldVlueArr = JSON.parse(JSON.stringify(target))
+      const success = Reflect.set(target, property, value, receiver);
+      // 数组
+      if (Array.isArray(target)) {
+        key = key + property
+        // 数组的时候，自身的length与小标也是属性，所以会走两次set，去掉length的一次即可
+        if (key !== 'length') {
+          // 获取对应的key
+          let cbKey = (key + property).replace(/\.(push|pop|shift|unshift)\.length\.\d+$/, '')
+          cbs[cbKey].call(options, target, oldVlueArr)
+        }
+        key = ''
+      } else {
+        // 对象
+        if (target.hasOwnProperty(property)) {
+          cbs[key + property].call(options, value, oldValueObj)
+          key = ''
+        }
+      }
+      return success;
+    },
+    get(target, property, receiver) {
+      if (typeof property == 'string') {
+        key += (property + '.')
+      }
+      // 对象是，递归代理
+      const value = Reflect.get(target, property, receiver);
+      if (typeof value === 'object' && value !== null) {
+        return new Proxy(value, handler);
+      }
+      return value;
+    }
+  };
+  return new Proxy(data, handler)
+}
+setWatcher(page)
 ```
