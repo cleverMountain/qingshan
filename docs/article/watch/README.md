@@ -62,20 +62,26 @@ const page = {
 console.log(page)
 function setWatcher(options) {
   const { data, watch } = options
-  for(let key in watch) {
-    let keys = key.split('.')
-    // 代理key值
-    const targetKey = keys[keys.length - 1]
-    keys = keys.slice(0, -1)
-    // 代理的数据对象
-    const targetDate = keys.reduce((pre, cur) => {
-      return pre[cur]
-    }, data)
-    // watcher的不同写法 函数 | 对象
-    const handler = watch[key].handler || watch[key]
-    // deep
-    const deep = watch[key].deep || false
-    defineReactive(targetDate, targetKey, handler, deep, options)
+  for (let k in watch) {
+    // 'obj.a, obj.c.d': 同时监听多个时属性
+    const newKey = k.replace(/\s/g, "");
+    arrkeys = newKey.split(',')
+    // console.log(keys)
+    arrkeys.forEach(key => {
+       let keys = key.split('.')
+      const targetKey = keys[keys.length - 1]
+      keys = keys.slice(0, -1)
+      // 代理的数据对象
+      const targetDate = keys.reduce((pre, cur) => {
+        return pre[cur]
+      }, data)
+      // watcher的不同写法 函数 | 对象
+      const handler = watch[k].handler || watch[k]
+   
+      // deep
+      const deep = watch[k].deep || false
+      defineReactive(targetDate, targetKey, handler, deep, options)
+    })
   }
 }
 function defineReactive(data, key, handler, deep, options) {

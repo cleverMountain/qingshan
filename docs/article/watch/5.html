@@ -12,33 +12,34 @@
   <script>
     // 创建一个嵌套对象
     const originalObject = {
-      a: 1,
-      b: {
-        c: 2,
-        d: {
-          e: 3,
-          f: 4
-        }
-      }
+      a: [],
     };
 
     // 创建一个递归代理对象的处理程序
     const recursiveHandler = {
       get(target, prop, receiver) {
- 
+
         const value = Reflect.get(target, prop, receiver);
+        // console.log(prop, value)
+        console.log('get: ', prop, target, value)
+
         if (typeof value === 'object' && value !== null) {
-       
+
           // 如果属性值是对象，则递归地创建代理
-          
+
           return new Proxy(value, recursiveHandler);
         }
-        console.log('get')
+    
+
         return value;
       },
       set(target, prop, value, receiver) {
-     
-        console.log('set')
+ 
+        console.log('set: ', prop, value)
+   
+        // if(target.hasOwnProperty(prop)) {
+        //  console.log(prop, value)
+        // }
         const success = Reflect.set(target, prop, value, receiver);
         // 在此可以添加任何必要的逻辑来处理属性设置
         return success;
@@ -48,13 +49,8 @@
     // 创建递归代理
     const proxyObject = new Proxy(originalObject, recursiveHandler);
 
-    // 现在我们可以使用代理对象访问嵌套属性
-    // console.log(proxyObject.b.c); // 输出: 2
-    // console.log(proxyObject.b.d.e); // 输出: 3
-
-    // 我们也可以修改属性
-    proxyObject.b.c = 42;
-    // console.log(proxyObject.b.c); // 输出: 42
+    proxyObject.a.slice(1, 1);;
+  console.log(proxyObject)
 
   </script>
 </body>
