@@ -108,7 +108,7 @@ module.exports = {
           path: '/article/waterfallFlow/'
         },
         {
-          title: '自定义微信小程序watch',
+          title: '自定义微信小程序watch与computed',
           path: '/article/watch/'
         }
       ],

@@ -26,6 +26,8 @@
 - 对data进行数据劫持，获取watch的回调函数
 - 当对应属性发生变化时，回调函数触发
 - 需要注意的时候，当对象深度嵌套时需要递归劫持
+- 支持同时监听多个属性 'obj.a, obj.b'
+- 
 ```js
 // 获取input元素
 const inputElement = document.getElementById('myInput')
@@ -175,4 +177,61 @@ function defineReactive(data, watch, options) {
   return new Proxy(data, handler)
 }
 setWatcher(page)
+```
+
+
+## 3.自定义computed
+- computed的set与get也是通过Object.defineProperty实现
+- get时,在data上绑定computed的属性
+- set时，触发回调函数
+
+```js
+var page = {
+  data: {
+    name: '1',
+    obj: {
+      a: 10,
+      c: {
+        d: 1
+      }
+    }
+  },
+  computed: {
+    computedName() {
+      return this.data.name
+    },
+    computedA: {
+      get() {
+        return this.data.obj.a
+      },
+      set(val) {
+        this.data.a = val - 2
+      }
+    }
+  }
+
+function setComputed(options) {
+  const { data, computed } = option
+  for (let key in computed) {
+    defineComputed(key, computed, data, options)
+  }
+}
+function defineComputed(key, computed, data, options) {
+  let val = data[key]
+  console.log(key)
+  // getter与setter
+  const getter = computed[key].get || computed[key]
+  const setter = computed[key].set
+  // 添加computed的属性
+  Object.defineProperty(data, key, {
+    get() {
+      return getter.call(options)
+    },
+    set(val) {
+      let res = setter.call(options, val
+      val = res
+    }
+  })
+}
+setComputed(page)
 ```
