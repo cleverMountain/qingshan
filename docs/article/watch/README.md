@@ -1,6 +1,6 @@
 1.最近在使用微信小程序时发现没有提供watch属性，便想着自己实现一个watch监听属性，仿照着vue2的watch国车过还算简单，下面是实现过程。
 
-## 1.自定义微信小程序中的watch(Object.defineProperty)
+## 1.watch(Object.defineProperty)
 1. html部分
 ```html
 <!DOCTYPE html>

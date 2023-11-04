@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <input type="text" id="myInput" oninput="updateValue(value)" />
+  <button onclick="click1()">按钮</button>
+
+
+  <script>
+
+
+    // 获取input元素
+
+
+    var page = {
+      data: {
+        name: '1',
+        obj: {
+          a: 10,
+          c: {
+            d: 1
+          }
+        }
+      },
+      computed: {
+        computedName() {
+          return this.data.name
+        },
+        computedA: {
+          get() {
+            return this.data.obj.a
+          },
+          set(val) {
+            this.data.a = val - 2
+          }
+        }
+      }
+    }
+
+    function setComputed(options) {
+      const { data, computed } = options
+
+      for (let key in computed) {
+        defineComputed(key, computed, data, options)
+      }
+    }
+    function defineComputed(key, computed, data, options) {
+      let val = data[key]
+      console.log(key)
+      const getter = computed[key].get || computed[key]
+
+      const setter = computed[key].set
+      Object.defineProperty(data, key, {
+        get() {
+          return getter.call(options)
+        },
+        set(val) {
+          let res = setter.call(options, val)
+
+          val = res
+        }
+      })
+    }
+    setComputed(page)
+    // console.log(page)
+    // const inputElement = document.getElementById('myInput');
+    // function click1() {
+    //   console.log(inputElement.value)
+    // }
+    // function updateValue(value) {
+
+    //   page.data.computedA = inputElement.value = value; // 当输入框的值改变时，更新 inputValue 变量的值
+    //   console.log(page)
+    // }
+    // updateValue(page.data.obj.a)
+  </script>
+</body>
+
+</html>
