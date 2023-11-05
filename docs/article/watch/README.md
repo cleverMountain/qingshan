@@ -181,9 +181,9 @@ setWatcher(page)
 
 
 ## 3.自定义computed
-- computed的set与get也是通过Object.defineProperty实现
-- get时,在data上绑定computed的属性
-- set时，触发回调函数
+1. 每个属性使用Object.defineProperty重新定义在data上
+2. 在daat上定义computed的属性，使用setDta定义
+3. computed中相关的属性变化时触发set，重新定义computed的值
 
 ```js
 var page = {
@@ -211,27 +211,45 @@ var page = {
   }
 
 function setComputed(options) {
-  const { data, computed } = option
+  const { data, computed } = options
+  for (let key in data) {
+    // 数据劫持
+    if (key !== '__webviewId__' && key !== 'canIUseGetUserProfile') {
+      defineReactive(key, data, options)
+    }
+  }
   for (let key in computed) {
+    // 数据劫持
     defineComputed(key, computed, data, options)
   }
 }
+// 重新定义
 function defineComputed(key, computed, data, options) {
-  let val = data[key]
-  console.log(key)
-  // getter与setter
   const getter = computed[key].get || computed[key]
   const setter = computed[key].set
-  // 添加computed的属性
+  let obj = {}
+  obj[key] = getter.call(options, data)
+  options.setData(obj)
+}
+function defineReactive(key, data, options) {
+  let val = data[key]
+  if (typeof val == 'object' && val !== null) {
+    for (let k in val) {
+      defineReactive(k, val, options)
+    }
+  }
   Object.defineProperty(data, key, {
     get() {
-      return getter.call(options)
+      return val
     },
-    set(val) {
-      let res = setter.call(options, val
-      val = res
+    set(value) {
+      // 劫持
+      val = value
+      const { computed, data } = options
+      for (let key in computed) {
+        defineComputed(key, computed, data, options)
+      }
     }
   })
 }
-setComputed(page)
 ```
