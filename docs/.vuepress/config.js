@@ -78,6 +78,10 @@ module.exports = {
                 {
                   title: '队列',
                   path: '/article/js/dataStructures/queue/'
+                },
+                {
+                  title: '链表',
+                  path: '/article/js/dataStructures/table/'
                 }
               ]
             },

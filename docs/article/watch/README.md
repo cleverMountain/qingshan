@@ -184,6 +184,7 @@ setWatcher(page)
 1. 每个属性使用Object.defineProperty重新定义在data上
 2. 在daat上定义computed的属性，使用setDta定义
 3. computed中相关的属性变化时触发set，重新定义computed的值
+4. 保存computed的缓存值，如果值改变触发setDta
 
 ```js
 var page = {
@@ -209,7 +210,8 @@ var page = {
       }
     }
   }
-
+// 缓存
+const cache = new Map()
 function setComputed(options) {
   const { data, computed } = options
   for (let key in data) {
@@ -225,11 +227,17 @@ function setComputed(options) {
 }
 // 重新定义
 function defineComputed(key, computed, data, options) {
-  const getter = computed[key].get || computed[key]
-  const setter = computed[key].set
-  let obj = {}
-  obj[key] = getter.call(options, data)
-  options.setData(obj)
+  const getter = computed[key].get || computed[key],
+      setter = computed[key].set,
+      obj = {},
+      value = getter.call(options, data)
+
+  // 缓存
+  if(cache.get(key) !== value) {
+    cache.set(key, value)
+    obj[key] = value
+    options.setData(obj)
+  }
 }
 function defineReactive(key, data, options) {
   let val = data[key]
