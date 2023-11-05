@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    class Node {
+      constructor(data) {
+        this.data = data
+        this.next = null
+      }
+    }
+    class LinkList {
+      constructor() {
+        this.head = null
+        this.length = 0
+        this.items = []
+      }
+      append(data) {
+        const node = new Node(data)
+        // this.items[this.length] = node
+        // this.head = node
+        if (!this.head) {
+          this.items[this.length] = node
+          this.head = node
+        } else {
+          
+        }
+        this.length++
+      }
+    }
+
+    const linkList = new LinkList()
+    linkList.append(1)
+    console.log(linkList)
+  </script>
+</body>
+
+</html>
