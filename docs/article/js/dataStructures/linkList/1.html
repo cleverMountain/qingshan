@@ -27,10 +27,12 @@
         // this.items[this.length] = node
         // this.head = node
         if (!this.head) {
-          this.items[this.length] = node
+          // this.items[this.length] = node
           this.head = node
         } else {
-          
+          while(this.head.next) {
+            this.head = this.head.next
+          }
         }
         this.length++
       }
@@ -38,6 +40,7 @@
 
     const linkList = new LinkList()
     linkList.append(1)
+    linkList.append(2)
     console.log(linkList)
   </script>
 </body>

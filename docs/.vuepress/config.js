@@ -81,7 +81,7 @@ module.exports = {
                 },
                 {
                   title: '链表',
-                  path: '/article/js/dataStructures/table/'
+                  path: '/article/js/dataStructures/linkList/'
                 }
               ]
             },
