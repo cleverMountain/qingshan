@@ -114,6 +114,10 @@ module.exports = {
         {
           title: '自定义微信小程序watch与computed',
           path: '/article/watch/'
+        },
+        {
+          title: '虚拟列表',
+          path: '/article/virList/'
         }
       ],
       '/original/': [

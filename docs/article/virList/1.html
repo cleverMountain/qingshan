@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    #container {
+      height: 300px;
+      position: relative;
+      overflow: auto;
+      border: 1px solid black;
+    }
+    .item-list {
+      position: absolute;
+      border: 1px solid gray;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div id="container">
+    <div id="list"></div>
+  </div>
+  <script>
+    let container = document.getElementById('container')
+        list =  document.getElementById('list'),
+        startIndex = 0,
+        itemHeight = 50,
+        gap = 7,
+        lastIndex = startIndex + gap,
+        total = 20,
+        itemList = [],
+        map = new Map()
+    function createItem(index) {
+      let item = document.createElement('div')
+      item.className = 'item-list'
+      item.innerHTML = 'item' + index
+      item.style.height = itemHeight + 'px'
+      item.style.top = (index * itemHeight) + 'px'
+      return item
+    }
+    function renderList() {
+      for(let i = startIndex; i < lastIndex; i++) {
+        if(!map.has(i)) {
+          item = createItem(i)
+      
+          list.appendChild(item)
+   
+          map.set(i, true)
+        }
+      }
+      
+      container.appendChild(list)
+    
+    }
+    container.addEventListener('scroll', updateLiat)
+    function delItem() {
+      // const ll = document.getElementsByClassName('item-list')
+      // for(let i = 0; i< startIndex; i++) {
+      //   list.removeChild(ll[i])
+      // }
+      console.log(map)
+    }
+    function updateLiat(e) {
+      const scrollTop = e.srcElement.scrollTop
+      startIndex = Math.max(0, Math.floor((scrollTop / itemHeight)))
+      lastIndex = Math.min(startIndex + gap, total)
+      // console.log(startIndex, lastIndex)
+      renderList()
+      delItem()
+    }
+    renderList()
+  </script>
+</body>
+</html>
