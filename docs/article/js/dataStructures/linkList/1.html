@@ -20,28 +20,138 @@
       constructor() {
         this.head = null
         this.length = 0
-        this.items = []
+
       }
+      // 添加
       append(data) {
         const node = new Node(data)
-        // this.items[this.length] = node
-        // this.head = node
-        if (!this.head) {
-          // this.items[this.length] = node
+        if (this.length == 0) {
           this.head = node
         } else {
-          while(this.head.next) {
-            this.head = this.head.next
+          // 找到没有next的node就是最后一个node
+          let cur = this.head
+          while (cur.next) {
+            cur = cur.next
           }
+          cur.next = node
         }
         this.length++
+      }
+      // 把所有内容以字符串的方式展示
+      toString() {
+        let str = ''
+        let cur = this.head
+        while (cur) {
+          str += cur.data
+          cur = cur.next
+        }
+        return str
+      }
+      // 插入
+      insert(position, data) {
+        // 边界判断
+        if (position > this.length || position < 0) return false
+        const node = new Node(data)
+        if (position == 0) {
+          let after = this.head
+          this.head = node
+          node.next = after
+        } else {
+          let cur = this.head
+          while (position-- > 1) {
+            cur = cur.next
+            // position--
+          }
+          console.log(cur)
+          // 从cur分隔开
+          let after = cur.next
+          // cur的next是node
+          cur.next = node
+          // node的next是之前cur的next
+          node.next = after
+        }
+        this.length++
+      }
+      // 获取某个位置的data
+      get(position) {
+        if (position > this.length || position <= 0) return false
+        let cur = this.head
+        while (position > 1) {
+          cur = cur.next
+          position--
+        }
+        return cur.data
+      }
+      // 返回索引,没找到返回-1
+      indexOf(data) {
+        let index = 0
+        let cur = this.head
+        while (cur.data !== data) {
+          index++
+
+          cur = cur.next
+          if (!cur) {
+            index = -1
+            break
+          }
+        }
+        return index
+      }
+      // 修改某个位置的数据
+      update(position, data) {
+        if (position > this.length || position <= 0) return false
+        let cur = this.head
+        while (position > 1) {
+          cur = cur.next
+          position--
+        }
+        cur.data = data
+      }
+      // 根据位置移除某个元素
+      removeAt(position) {
+        if (position > this.length || position == 0) return false
+        if (position == 1) {
+          this.head = this.head.next
+        } else {
+          let cur = this.head
+          let previous
+          while (position > 1) {
+            previous = cur
+            cur = cur.next
+
+            position--
+          }
+          console.log(cur, previous)
+          previous.next = cur.next
+        }
+        this.length--
+      }
+      // 通过值删除某个元素
+      move(data) {
+        const index = this.indexOf(data)
+        return this.removeAt(index)
+      }
+      // 是否为空
+      isEmpty() {
+        return this.length == 0 ? true : false
+      }
+      // size
+      size() {
+        return this.length
       }
     }
 
     const linkList = new LinkList()
+    linkList.append(0)
     linkList.append(1)
     linkList.append(2)
+    linkList.append(4)
     console.log(linkList)
+    linkList.insert(1, 5)
+    console.log(linkList.toString())
+    console.log(linkList.get(1))
+    console.log(linkList.indexOf(10))
+    linkList.removeAt(1)
   </script>
 </body>
 
