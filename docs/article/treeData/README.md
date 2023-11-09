@@ -32,6 +32,79 @@ function flattenToTree(flatArray) {
 }
 ```
 
-- 通过递归实现
+- 通过递归实现,时间复杂度O(n^2)
+```js
+function flattenToTree(flatArray) {
+  const parnet = arr.filter(item => !item.parentId),
+    children = arr.filter(item => item.parentId
+
+  function toTree(parnet, children) {
+    parnet.forEach(p => {
+      children.forEach((c, i) => {
+        if (p.id === c.parentId) {
+          const _children = JSON.parse(JSON.stringify(children))
+          _children.splice(i, 1)
+          toTree([c], _children)
+          if (!p.children) {
+            p.children = [c]
+          } else {
+            p.children.push(c)
+          }
+        }
+      })
+    })
+  }
+  toTree(parnet, children)
+  return parnet
+}
+
+let arr = [
+  {
+    id: 1,
+    parentId: null,
+    name: '打赏'
+  },
+  {
+    id: 2,
+    parentId: null,
+    name: '打'
+  },
+  {
+    id: 3,
+    parentId: 1,
+    name: '打赏'
+  },
+  {
+    id: 4,
+    parentId: 1,
+    name: '打赏'
+  },
+  {
+    id: 5,
+    parentId: 2,
+    name: '打赏'
+  }
+]
+console.log(flattenToTree(arr))
+```
+
+- 结果如下
+
+<img src="./树形化.png">
+
+## 2.树形数据扁平化
+- 使用递归
+```js
+function TreeToFlatten(data,arr =  []) {
+  data.forEach(item => {
+    if (item.children && item.children.length > 0) {
+      TreeToFlatten(item.children, arr)
+    }
+    delete item.children
+    arr.push(item)
+  })
+  return arr
+}
+```
 
 
