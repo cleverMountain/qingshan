@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    let tree = [
+      {
+        "id": 1,
+        "parentId": null,
+        "name": "打赏",
+        "children": [
+          {
+            "id": 3,
+            "parentId": 1,
+            "name": "打赏"
+          },
+          {
+            "id": 4,
+            "parentId": 1,
+            "name": "打赏"
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "parentId": null,
+        "name": "打",
+        "children": [
+          {
+            "id": 5,
+            "parentId": 2,
+            "name": "打赏"
+          }
+        ]
+      }
+    ]
+    function TreeToFlatten(data,arr =  []) {
+      data.forEach(item => {
+        if (item.children && item.children.length > 0) {
+          TreeToFlatten(item.children, arr)
+        }
+        delete item.children
+        arr.push(item)
+      })
+      return arr
+    }
+    TreeToFlatten(tree)
+  </script>
+</body>
+
+</html>
