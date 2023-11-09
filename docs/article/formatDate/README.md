@@ -13,7 +13,7 @@ function formatDateWithRegex(date, format) {
   return format.replace(/YYYY|MM|DD|hh|mm|ss/g, match => 
     // padStart用0填充至两位
     return String(map[match]).padStart(2, '0')
-  });
+  );
 }
 ```
 

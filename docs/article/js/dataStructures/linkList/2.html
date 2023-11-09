@@ -29,26 +29,123 @@
         if (this.length == 0) {
           this.head = this.tail = node
         } else {
-          // let cur = this.head
-          // let previous
-          // while(cur.next) {
-          //   previous = cur
-          //   cur = cur.next
-      
-          // }
-          // console.log(cur)
-          // cur.next = node
-          // node.previous = cur
           node.previous = this.tail
           this.tail.next = node
           this.tail = node
         }
         this.length++
       }
+      // 返回正向遍历的节点字符串形式
+      forwardString() {
+        let str = '',
+          cur = this.head
+        while (cur) {
+          str += cur.data
+          cur = cur.next
+        }
+        return str
+      }
+      // 特定位置插入某一项
+      insert(position, data) {
+        if (position < 0 && position > this.length) return false
+        let node = new Node(data),
+          cur = this.head
+        if (position == 0) {
+          this.head = node
+          node.next = cur
+        } else {
+          let previous
+          while (position) {
+            previous = cur
+            cur = cur.next
+            position--
+          }
+          // console.log(previous)
+          previous.next = node
+          node.next = cur
+          node.previous = previous
+        }
+        this.length++
+      }
+      // 获取对应位置的元素
+      get(position) {
+        let cur = this.head
+        while (position) {
+          cur = cur.next
+          position--
+        }
+        return cur.data
+      }
+      // 返回元素在列表中的索引。如果列表中没有该元素则返回-1
+      indexOf(data) {
+        let cur = this.head
+        let index = 0
+        while (cur.data !== data) {
+          index++
+          cur = cur.next
+          if (!cur) {
+            index = -1
+            break
+          }
+        }
+        return index
+      }
+      // 修改某个位置的元素
+      update(positon, data) {
+        let cur = this.head
+        while (positon) {
+          cur = cur.next
+          positon--
+        }
+        cur.data = data
+        return true
+      }
+      // 从列表的特定位置移除一项
+      removeAt(position) {
+        if (position == 0) {
+          this.head = this.head.next
+        } else {
+          let cur = this.head
+          let previous
+          while (position) {
+            previous = cur
+            cur = cur.next
+            position--
+          }
+          previous.next = cur.next
+          cur.previous = previous
+        }
+      }
+      // 从列表中移除一项
+      remove(data) {
+       let index = this.indexOf(data)
+       this.removeAt(index)
+      }
+      // 返回反向遍历的节点字符串形式
+      backwordString() {
+        let str = '',
+          cur = this.tail
+        while (cur) {
+          str += cur.data
+          cur = cur.previous
+        }
+        return str
+      }
+      // 是否为空
+      isEmpty() {
+        return this.length == 0 ? true : false
+      }
+      // 长度
+      size() {
+        return this.length
+      }
     }
     let linkList = new DoublyLinkList()
-    linkList.append(1)
+    linkList.append(0)
     linkList.append(2)
+    linkList.insert(1, 1)
+    linkList.forwardString()
+    linkList.backwordString()
     console.log(linkList)
   </script>
 </body>
