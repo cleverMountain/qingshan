@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    function flattenToTree(flatArray) {
+      const tree = []
+      arr.map(item => {
+        // if (!item.parentId) {
+        //   // item.children = []
+        //   tree.push(item)
+        // } else {
+        //   // console.log(item)
+        //   // const parent = item.parentId
+        //   let parent =  arr.find(ite => ite.id = item.parentId)
+        //   // if(!parent.children) {
+        //   //   parent.children = [item]
+        //   // } else {
+        //   //   // console.log(parent)
+        //   //   parent.children.push(item)
+        //   // }
+        //   parent.children = [item]
+        //   console.log(parent)
+
+        // }
+        let parentId = item.parentId
+        if (!parentId) {
+          tree.push(item)
+          let child = arr.find(ite => ite.parentId === item.id)
+          if (child && !item.children) {
+            item.children = [child]
+          } else if (child && item.children) {
+     
+            item.children.push(child)
+          }
+        } else {
+          let child = arr.find(ite => ite.parentId === item.id)
+          if (child && !item.children) {
+            item.children = [child]
+          } else if (child && item.children) {
+          
+            item.children.push(child)
+          }
+        }
+      })
+      console.log(tree)
+    }
+
+    let arr = [
+      {
+        id: 4,
+        parentId: 3,
+        name: '打赏'
+      },
+      {
+        id: 1,
+        parentId: null,
+        name: '打赏'
+      },
+      {
+        id: 2,
+        parentId: null,
+        name: '打'
+      },
+      {
+        id: 3,
+        parentId: 1,
+        name: '打赏'
+      },
+      {
+        id: 5,
+        parentId: 4,
+        name: '打赏'
+      },
+      {
+        id: 6,
+        parentId: 4,
+        name: '打赏'
+      }
+    ]
+    flattenToTree(arr)
+  </script>
+</body>
+
+</html>

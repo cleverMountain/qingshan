@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    function flattenToTree(flatArray) {
+      const tree = [];
+      const lookup = {};
+
+      // 创建查找表
+      for (const item of flatArray) {
+        lookup[item.id] = { ...item, children: [] };
+      }
+      console.log(lookup)
+      // 构建树
+      for (const item of flatArray) {
+        if (item.parentId !== null) {
+          // 找到父亲
+          const parent = lookup[item.parentId];
+          if (parent) {
+            // 父亲存在则放自己进去
+            parent.children.push(lookup[item.id]);
+          }
+        } else {
+          tree.push(lookup[item.id]);
+        }
+      }
+      console.log(tree)
+      return tree;
+    }
+
+    let arr = [
+      {
+        id: 4,
+        parentId: 3,
+        name: '打赏'
+      },
+      {
+        id: 1,
+        parentId: null,
+        name: '打赏'
+      },
+      {
+        id: 2,
+        parentId: null,
+        name: '打'
+      },
+      {
+        id: 3,
+        parentId: 1,
+        name: '打赏'
+      },
+    ]
+    flattenToTree(arr)
+  </script>
+</body>
+
+</html>

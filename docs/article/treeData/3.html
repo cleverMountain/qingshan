@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    function flattenToTree(flatArray) {
+      const parnet = arr.filter(item => !item.parentId),
+        children = arr.filter(item => item.parentId)
+
+      function toTree(parnet, children) {
+        parnet.forEach(p => {
+          children.forEach((c, i) => {
+            if (p.id === c.parentId) {
+              const _children = JSON.parse(JSON.stringify(children))
+              _children.splice(i, 1)
+              toTree([c], _children)
+              if (!p.children) {
+                p.children = [c]
+              } else {
+                p.children.push(c)
+              }
+            }
+          })
+        })
+      }
+      toTree(parnet, children)
+      return parnet
+    }
+
+    let arr = [
+      {
+        id: 1,
+        parentId: null,
+        name: '打赏'
+      },
+      {
+        id: 2,
+        parentId: null,
+        name: '打'
+      },
+      {
+        id: 3,
+        parentId: 1,
+        name: '打赏'
+      },
+      {
+        id: 4,
+        parentId: 1,
+        name: '打赏'
+      },
+      {
+        id: 5,
+        parentId: 2,
+        name: '打赏'
+      }
+
+    ]
+    console.log(flattenToTree(arr))
+  </script>
+</body>
+
+</html>
