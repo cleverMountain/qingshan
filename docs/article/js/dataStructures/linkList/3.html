@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    class Node {
+      constructor(key) {
+        this.key = key
+        this.next = null
+        this.previous = null
+      }
+    }
+    class LinkList {
+
+      constructor() {
+        this.head = null;
+        this.tail = null;
+      }
+      addToHead(key) {
+        let node = new Node(key)
+        if (!this.head) {
+          this.head = this.tail = node
+        } else {
+          let preHead = this.head
+          this.head = node
+          node.next = preHead
+          preHead.previous = node
+        }
+        return node
+      }
+      removeLast() {
+        let key = this.tail.key
+        let last = this.tail.previous
+        last.next = null
+        this.tail = last
+        return key
+      }
+      moveToHead(node) {
+        // console.log(node === this.head)
+        // // 如果是第一个
+        if (node === this.head) return
+        // 如果是最后一个
+        if (node == this.tail) {
+          let head = this.head
+          this.head = node
+          node.next = head
+          this.tail = this.tail.previous
+          this.tail.next = null
+        } else {
+          // 不是最后一个
+          // 前指针
+          node.previous.next = node.next
+          // 后指针
+          node.next.previous = node.previous
+          let head = this.head
+          this.head = node
+          node.next = head
+        }
+      }
+    }
+    class LRUCache {
+      constructor(limit) {
+        this.limit = limit
+        this.cache = new Map()
+        this.order = new LinkList()
+      }
+      put(key, value) {
+        // 添加
+        if (!this.cache.has(key)) {
+          // 不超过最大限制
+          const node = this.order.addToHead(key)
+          this.cache.set(key, { value, node })
+          // 超过最大限制
+          if (this.cache.size > this.limit) {
+            const removeKey = this.order.removeLast()
+            this.cache.delete(removeKey)
+          }
+        } else {
+          // 再次调用，删除自己把自己放最前面
+          let node = this.cache.get(key).node
+          this.order.moveToHead(node)
+          console.log(node)
+
+        }
+      }
+    }
+    let lru = new LRUCache(3)
+    lru.put('qq1', 1)
+    lru.put('qq2', 2)
+    lru.put('qq3', 3)
+    lru.put('qq3', 4)
+    lru.put('qq4', 1)
+    lru.put('qq3', 2)
+    console.log(lru)
+  </script>
+</body>
+
+</html>
