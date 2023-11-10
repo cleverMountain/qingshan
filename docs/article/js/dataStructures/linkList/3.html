@@ -43,6 +43,7 @@
         return key
       }
       moveToHead(node) {
+      
         // console.log(node === this.head)
         // // 如果是第一个
         if (node === this.head) return
@@ -51,7 +52,10 @@
           let head = this.head
           this.head = node
           node.next = head
-          this.tail = this.tail.previous
+          head.previous = node
+          let lats = this.tail
+
+          this.tail = lats.previous
           this.tail.next = null
         } else {
           // 不是最后一个
@@ -62,6 +66,7 @@
           let head = this.head
           this.head = node
           node.next = head
+          head.previous = node
         }
       }
     }
@@ -90,6 +95,13 @@
 
         }
       }
+      get(key) {
+        if (this.cache.has(key)) {
+          this.order.moveToHead(this.cache.get(key).node)
+          return this.cache.get(key).value
+        }
+        return -1
+      }
     }
     let lru = new LRUCache(3)
     lru.put('qq1', 1)
@@ -98,6 +110,7 @@
     lru.put('qq3', 4)
     lru.put('qq4', 1)
     lru.put('qq3', 2)
+    lru.get('qq4')
     console.log(lru)
   </script>
 </body>
