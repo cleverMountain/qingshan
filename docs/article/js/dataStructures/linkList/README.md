@@ -152,6 +152,148 @@ class LinkList {
 
 ## 2.双向链表的封装
 
+- append：在末尾添加一个元素
+- forwardString：把所有内容以字符串的方式展示
+- insert：在某个位置插入元素
+- get：获取某个位置元素的值
+- indexOf：返回某个元素的索引值
+- update：修改处于某个位置元素的值
+- removeAt：根据位置移除某个元素
+- move：根据值移除某个元素
+- isEmpty：判断链表是否为空
+- size：返回链表的长度
+```js
+class Node {
+  constructor(data) {
+    this.previous = null
+    this.data = data
+    this.next = null
+  }
+}
+class DoublyLinkList {
+  constructor() {
+    this.head = null
+    this.tail = null
+    this.length = 0
+  }
+  // 在尾部插入元素
+  append(data) {
+    const node = new Node(data)
+    if (this.length == 0) {
+      this.head = this.tail = node
+    } else {
+      node.previous = this.tail
+      this.tail.next = node
+      this.tail = node
+    }
+    this.length++
+  }
+  // 返回正向遍历的节点字符串形式
+  forwardString() {
+    let str = '',
+      cur = this.head
+    while (cur) {
+      str += cur.data
+      cur = cur.next
+    }
+    return str
+  }
+  // 特定位置插入某一项
+  insert(position, data) {
+    if (position < 0 && position > this.length) return false
+    let node = new Node(data),
+      cur = this.head
+    if (position == 0) {
+      this.head = node
+      node.next = cur
+    } else {
+      let previous
+      while (position) {
+        previous = cur
+        cur = cur.next
+        position--
+      }
+      // console.log(previous)
+      previous.next = node
+      node.next = cur
+      node.previous = previous
+    }
+    this.length++
+  }
+  // 获取对应位置的元素
+  get(position) {
+    let cur = this.head
+    while (position) {
+      cur = cur.next
+      position--
+    }
+    return cur.data
+  }
+  // 返回元素在列表中的索引。如果列表中没有该元素则返回-1
+  indexOf(data) {
+    let cur = this.head
+    let index = 0
+    while (cur.data !== data) {
+      index++
+      cur = cur.next
+      if (!cur) {
+        index = -1
+        break
+      }
+    }
+    return index
+  }
+  // 修改某个位置的元素
+  update(positon, data) {
+    let cur = this.head
+    while (positon) {
+      cur = cur.next
+      positon--
+    }
+    cur.data = data
+    return true
+  }
+  // 从列表的特定位置移除一项
+  removeAt(position) {
+    if (position == 0) {
+      this.head = this.head.next
+    } else {
+      let cur = this.head
+      let previous
+      while (position) {
+        previous = cur
+        cur = cur.next
+        position--
+      }
+      previous.next = cur.next
+      cur.previous = previous
+    }
+  }
+  // 从列表中移除一项
+  remove(data) {
+    let index = this.indexOf(data)
+    this.removeAt(index)
+  }
+  // 返回反向遍历的节点字符串形式
+  backwordString() {
+    let str = '',
+      cur = this.tail
+    while (cur) {
+      str += cur.data
+      cur = cur.previous
+    }
+    return str
+  }
+  // 是否为空
+  isEmpty() {
+    return this.length == 0 ? true : false
+  }
+  // 长度
+  size() {
+    return this.length
+  }
+}
+```
 
 
 

@@ -82,6 +82,14 @@ module.exports = {
                 {
                   title: '链表',
                   path: '/article/js/dataStructures/linkList/'
+                },
+                {
+                  title: '集合',
+                  path: '/article/js/dataStructures/map/'
+                },
+                {
+                  title: '哈希表',
+                  path: '/article/js/dataStructures/hashMap/'
                 }
               ]
             },
