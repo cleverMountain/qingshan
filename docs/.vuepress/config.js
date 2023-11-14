@@ -90,6 +90,10 @@ module.exports = {
                 {
                   title: '哈希表',
                   path: '/article/js/dataStructures/hashMap/'
+                },
+                {
+                  title: '树结构',
+                  path: '/article/js/dataStructures/tree/'
                 }
               ]
             },
