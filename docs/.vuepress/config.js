@@ -94,6 +94,10 @@ module.exports = {
                 {
                   title: '树结构',
                   path: '/article/js/dataStructures/tree/'
+                },
+                {
+                  title: '图论',
+                  path: '/article/js/dataStructures/graph/'
                 }
               ]
             },

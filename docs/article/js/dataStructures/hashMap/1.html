@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    // 哈希化：将大数字转化成小数字
+    // 哈希函数：将单词转化成大数字，大数字再进行哈希化，这个过程实现的函数就叫做哈希函数
+    // 哈希表：最终将数据插入到这个数据，对整个结构的封装，称之为哈希表
+    // 哈希冲突：哈希化后的小数组重复
+    // 解决哈希冲突：链地址法
+    // 解决哈希冲突：开放地址法(线性探测，二次探测，再哈希化)
+    // 线性探测：线性寻找空余位置，步长线性
+    // 二次探测：对探测值做了优化，步长优化
+    // 再哈希化：哈希化的结果作为步长
+    // 填装因子：总数据项 / 哈希表长度
+
+
+
+    // 哈希函数
+    // 1.将字符串转化成较大的数字：hashCode
+    // 2.将大的数字hashCode压缩到数组范围(大小)之内
+    function hasFunc(str, size) {
+      let hashCode = 0
+      // 霍纳算法
+      for(let i = 0; i < str.length; i++) {
+        hashCode = 37 * hashCode + str.charCodeAt(i)
+      }
+      // 取余(下标)
+      const index = hashCode % size
+      return index
+    }
+  </script>
+</body>
+</html>
