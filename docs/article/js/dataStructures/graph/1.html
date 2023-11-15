@@ -89,6 +89,30 @@
         }
         console.log(colors)
       }
+      // 深度优先搜索，需要先定义递归函数
+      dfs(initV, handler) {
+        // 1.初始状态
+        let colors = this.initStatus()
+        this.visit(initV, colors, handler)
+      }
+      visit(v, colors, handler) {
+
+        // 1.将该节点状态修改为已访问未探索
+        colors[v] = 'gray'
+        // 2.执行处理函数
+        handler(v, this.edges[v])
+        let children = this.edges[v]
+        // 3.递归访问其他节点
+        for (let i = 0; i < children.length; i++) {
+          let item = children[i]
+          if (colors[item] == 'white') {
+            // handler(item, this.edges[item])
+            this.visit(item, colors, handler) 
+          }
+          // 4.修改状态为已访问已探索
+          colors[item] = 'black'
+        }
+      }
     }
 
     let graph = new Graph()
@@ -102,7 +126,7 @@
     graph.addEdges('C', 'H')
     graph.addEdges('D', 'I')
 
-    graph.bfs('A', (a, b) => {
+    graph.dfs('A', (a, b) => {
       console.log(a, b)
     })
     console.log(graph)
