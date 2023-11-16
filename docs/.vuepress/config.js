@@ -108,7 +108,12 @@ module.exports = {
             },
             {
               title: '算法',
-              path: '/article/js/algorithms/'
+              children: [
+                {
+                  title: '冒泡排序',
+                  path: '/article/js/algorithms/bubbleSort/'
+                }
+              ]
             }
           ]
         },
