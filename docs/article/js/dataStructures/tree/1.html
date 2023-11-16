@@ -116,13 +116,82 @@
         }
         return false
       }
-
+      // 删除操作
+      remove(key) {
+        // 先找到node及node的父亲
+        const nodeObj = this.find(this.root, key)
+        const { self, parent, isLeft } = nodeObj
+        console.log(nodeObj)
+        // 叶子节点
+        if (!self.left && !self.right) {
+          if (isLeft) {
+            parent.left = null
+          } else {
+            parent.right = null
+          }
+        }
+        // 单节点
+        if (!self.left || !self.right) {
+          if (isLeft) {
+            parent.right = self.left || self.right
+          } else {
+            parent.left = self.left || self.right
+          }
+        }
+        // 双节点
+        if (self.left && self.right) {
+          // 父节点是单节点
+          if (!parent.left || !parent.right) {
+            parent.left = self.left
+            parent.right = self.right
+          }
+          // 父亲是双节点
+          if (parent.left && parent.right) {
+            if (isLeft) {
+              let left = parent.left = self.right
+              // 一直往后找
+              while (left.left) {
+                left = left.left
+              }
+              left.left = self.left
+            } else {
+              let right = parent.right = self.right
+              while (right.right) {
+                right = right.right
+              }
+              right.right = self.left
+            }
+          }
+        }
+      }
+      // 找到并返回某个节点
+      find(root, key) {
+        return this.travelsalFind(root, key)
+      }
+      // 递归寻找
+      travelsalFind(root, key, parent) {
+        if (root.key === key) {
+          return {
+            self: root,
+            parent,
+            isLeft: parent.key < key ? true : false
+          }
+        } else if (root.key > key) {
+          return this.travelsalFind(root.left, key, root)
+        } else {
+          return this.travelsalFind(root.right, key, root)
+        }
+        return false
+      }
     }
     const tree = new BinarySearchTree()
-    tree.insert(3)
-    tree.insert(1)
-    tree.insert(2)
+    tree.insert(6)
+    tree.insert(7)
+    tree.insert(5)
     tree.insert(4)
+    tree.insert(5.5)
+    tree.insert(8)
+    tree.insert(7.2)
     // tree.travelsal((node) => {
     //   console.log(node)
     // })
@@ -130,9 +199,10 @@
     //   console.log(key)
     // })
 
-    console.log(tree)
+
     // console.log(tree.getMax())
-    console.log(tree.has(5))
+    tree.remove(8)
+    console.log(tree)
   </script>
 </body>
 
