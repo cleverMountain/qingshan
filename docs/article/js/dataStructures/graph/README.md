@@ -133,28 +133,30 @@ class Graph {
 4. 代码
 ```js
 bfs(initV, handler) {
-// 1.初始状态
-let colors = this.initStatus()
-console.log(colors)
-// 2.把顶点放进队列
-const queue = [initV]
-while (queue.length) {
-  // 3.1开始探索
-  const cur = queue.shift()
-  colors[cur] = 'gray'
-  // 3.2寻找子节点
-  const chilren = this.edges[cur]
-  for (let i = 0; i < chilren.length; i++) {
-    // 白色未被访问
-    if (colors[chilren[i]] == 'white') {
-      queue.push(chilren[i])
-      // 已访问未探索
-      colors[chilren[i]] = 'gray'
+  // 1.初始状态
+  let colors = this.initStatus()
+  console.log(colors)
+  // 2.把顶点放进队列
+  const queue = [initV]
+  while (queue.length) {
+    // 3.1开始探索
+    const cur = queue.shift()
+    colors[cur] = 'gray'
+    // 3.2寻找子节点
+    const chilren = this.edges[cur]
+    for (let i = 0; i < chilren.length; i++) {
+      // 白色未被访问
+      if (colors[chilren[i]] == 'white') {
+        queue.push(chilren[i])
+        // 已访问未探索
+        colors[chilren[i]] = 'gray'
+      }
+    }
+    // 3.2探索完毕
+    colors[cur] = 'black'
+    // 4.处理节点
+    handler(cur, this.edges[cur])
   }
-  // 3.2探索完毕
-  colors[cur] = 'black'
-  // 4.处理节点
-  handler(cur, this.edges[cur])
 }
 ```
 

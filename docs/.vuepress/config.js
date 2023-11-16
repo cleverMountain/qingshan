@@ -66,10 +66,15 @@ module.exports = {
       ],
       '/article/': [
         {
+          title: '自定义微信小程序watch与computed',
+          path: '/article/watch/'
+        },
+        {
           title: 'js的数据结构与算法',
           children: [
             {
               title: '数据结构',
+              collapsable: false,  // 
               children: [
                 {
                   title: '栈',
@@ -108,6 +113,10 @@ module.exports = {
           ]
         },
         {
+          title: '数组树形化与扁平化',
+          path: '/article/treeData/'
+        },
+        {
           title: 'jsonp',
           path: '/article/jsonp/'
         },
@@ -128,17 +137,11 @@ module.exports = {
           path: '/article/waterfallFlow/'
         },
         {
-          title: '自定义微信小程序watch与computed',
-          path: '/article/watch/'
-        },
-        {
           title: '虚拟列表',
           path: '/article/virList/'
         },
-        {
-          title: '数组树形化与扁平化',
-          path: '/article/treeData/'
-        }
+
+
       ],
       '/original/': [
         {
