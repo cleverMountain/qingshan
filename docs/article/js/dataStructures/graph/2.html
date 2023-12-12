@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    
+// 邻接矩阵
+// 邻接表
+// 广度优先搜索 Breadth-First-Search BFS
+// 深度优先搜索 Depth-First-Search DFS
+class Graph {
+  constructor() {
+    this.vertexes = [] // 顶点
+    this.edges = Object.create(null) // 边
+  }
+  // 添加节点
+  addVertexts() {
+    for (let i = 0; i < arguments.length; i++) {
+      const v = arguments[i]
+      this.vertexes.push(v)
+      this.edges[v] = []
+    }
+  }
+  // 添加边
+  addEdges(v1, v2) {
+    // console.log(this.vertexes)
+    // console.log(this.edges)
+    this.edges[v1].push(v2) // 其他节点
+    // this.edges[v2].push(v1) // 自己节点
+  }
+
+  // 初始化状态
+  initStatus() {
+    // white 没有访问  gray 访问了没有探索 black既访问了又探索了
+    const colors = {}
+    for (let i = 0; i < this.vertexes.length; i++) {
+      colors[this.vertexes[i]] = 'white'
+    }
+    return colors
+  }
+  // 广度优先搜索
+  bfs(initV, handler) {
+    const colors = this.initStatus()
+    const queue = [initV]
+    while(queue.length) {
+      const cur = queue.shift()
+      if(this.edges[cur].length > 0) {
+        queue.push(...this.edges[cur])
+      }
+      colors[cur] = 'black'
+      handler(cur, this.edges[cur])
+    }
+  }
+  // 深度优先搜索，需要先定义递归函数
+  dfs(initV, handler) {
+
+  }
+  visit(v, colors, handler) {
+
+
+  }
+}
+
+let graph = new Graph()
+let arr = ['A', 'B', 'C', 'D', 'E', 'F', 'H', 'I']
+graph.addVertexts(...arr)
+graph.addEdges('A', 'B')
+graph.addEdges('A', 'C')
+graph.addEdges('A', 'D')
+graph.addEdges('B', 'E')
+graph.addEdges('B', 'F')
+graph.addEdges('C', 'H')
+graph.addEdges('D', 'I')
+
+graph.dfs('A', (a, b) => {
+  console.log(a, b)
+})
+console.log(graph)
+graph.bfs('A', (cur, b) => {
+  console.log(cur, b)
+})
+  </script>
+</body>
+</html>

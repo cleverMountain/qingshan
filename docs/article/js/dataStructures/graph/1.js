@@ -71,7 +71,7 @@ class Graph {
       // 3.2探索完毕
       colors[cur] = 'black'
       // 4.处理节点
-      handler(cur, this.edges[cur])
+      handler(cur, this.edges[cur], colors)
     }
     console.log(colors)
   }
@@ -112,7 +112,7 @@ graph.addEdges('B', 'F')
 graph.addEdges('C', 'H')
 graph.addEdges('D', 'I')
 
-graph.dfs('A', (a, b) => {
-  console.log(a, b)
+graph.bfs('A', (a, b, c) => {
+  console.log(a, b, c)
 })
 console.log(graph)

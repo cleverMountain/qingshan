@@ -54,6 +54,7 @@
         for (let i = 0; i < this.vertexes.length; i++) {
           colors[this.vertexes[i]] = 'white'
         }
+        colors['B'] = 'black'
         return colors
       }
       // 广度优先搜索
@@ -123,7 +124,7 @@
     graph.addEdges('C', 'H')
     graph.addEdges('D', 'I')
 
-    graph.dfs('A', (a, b) => {
+    graph.bfs('A', (a, b) => {
       console.log(a, b)
     })
     console.log(graph)
