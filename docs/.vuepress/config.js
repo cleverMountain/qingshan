@@ -145,7 +145,10 @@ module.exports = {
           title: '虚拟列表',
           path: '/article/virList/'
         },
-
+        {
+          title: 'diff算法',
+          path: '/article/diff/'
+        }
 
       ],
       '/original/': [
